@@ -22,8 +22,8 @@ const Login = () => {
   };
 
   return (
-    <div className="h-screen overflow-hidden  flex items-center justify-center">
-      <div className="w-full p-6 lg:p-0 flex items-center justify-center">
+    <div className=" py-4 lg:py-0 lg:h-screen overflow-hidden  flex items-center justify-center">
+      <div className="w-full p-5 lg:p-0 flex items-center justify-center">
         <div className="w-full max-w-[470px] border border-gray-200  bg-white  p-8 rounded-[8px]">
           <p className="text-center uppercase font-semibold text-[28px]">CRM</p>
           <div className="flex items-start justify-start flex-col mt-6">
