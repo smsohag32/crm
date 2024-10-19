@@ -22,7 +22,7 @@ const Login = () => {
   };
 
   return (
-    <div className=" py-4 lg:py-0 lg:h-screen overflow-hidden  flex items-center justify-center">
+    <div className=" min-h-[80vh] lg:py-0 lg:min-h-screen overflow-hidden  flex items-center justify-center">
       <div className="w-full p-5 lg:p-0 flex items-center justify-center">
         <div className="w-full max-w-[470px] border border-gray-200  bg-white  p-8 rounded-[8px]">
           <p className="text-center uppercase font-semibold text-[28px]">CRM</p>
