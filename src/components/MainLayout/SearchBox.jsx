@@ -47,14 +47,14 @@ const SearchBox = () => {
    ]
    return (
       <div className="w-full">
-         <Popover className="lg:w-80 bg-red-500" open={open} onOpenChange={setOpen}>
+         <Popover className="lg:w-80 bg-red-500 w-full" open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
                <Button
                   variant="outline"
                   role="combobox"
 
                   aria-expanded={open}
-                  className="lg:w-80  bg-white !py-5 justify-between"
+               className="lg:w-80  w-full bg-white !py-5 justify-between"
                >
                   {value
                      ? frameworks.find((framework) => framework.value === value)?.label
@@ -62,8 +62,8 @@ const SearchBox = () => {
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                </Button>
             </PopoverTrigger>
-            <PopoverContent className="lg:w-80  p-0">
-               <Command className="w-full">
+            <PopoverContent className="  w-80  lg:w-80 p-0">
+               <Command className="w-full ">
                   <CommandInput placeholder="Search here..." />
                   <CommandList>
                      <CommandEmpty>No framework found.</CommandEmpty>

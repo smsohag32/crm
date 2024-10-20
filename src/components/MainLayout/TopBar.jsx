@@ -1,32 +1,34 @@
 import logo from "@/assets/icons/logo.png"
 import { Link } from "react-router-dom";
-import {
-   Tooltip,
-   TooltipContent,
-   TooltipProvider,
-   TooltipTrigger,
-} from "@/components/ui/tooltip"
 
 import SearchBox from "./SearchBox";
 import { Button } from "../ui/button";
 import UserAvatar from "../user-avatar/UserAvatar";
-import { CircleDollarSign, CircleUser, DollarSign, LayoutDashboard, Ratio, SquareCheckBig } from "lucide-react";
+import { AlignJustify, CircleDollarSign, CircleUser, LayoutDashboard, Ratio, SquareCheckBig } from "lucide-react";
+import { useMediaQuery } from "@/hooks/use-media-query";
+import { useState } from "react";
 const TopBar = () => {
+   const [isOpen, setOpen] = useState(false)
+   const isDesktop = useMediaQuery("(min-width: 1024px)");
    return (
-      <div className="w-full flex px-5 py-3 items-center border-b border-b-gray-200 bg-white gap-6 justify-between">
+      <div className="w-full flex px-5 py-3 items-center border-b border-b-gray-200 bg-white gap-4 justify-between">
 
-         <div className="w-full flex items-center justify-between gap-10 ">
+         <div className="lg:w-full flex-1 lg:flex-auto flex items-center justify-between gap-14 ">
             <div>
                <Link to={"/"} className="flex items-center text-[20px] font-medium gap-2">
                   <img className="w-12" src={logo} alt="crm" />
                   CRM
                </Link>
             </div>
-            <div className="w-full max-w-sm">
+            <div className="w-full lg:max-w-sm">
                <SearchBox />
             </div>
          </div>
-         <div className="w-full flex items-center justify-end gap-2">
+
+         <Button className="lg:hidden" variant="ghost" onClick={() => setOpen(!isOpen)}>
+            <AlignJustify />
+         </Button>
+         {isDesktop ? <div className="w-full flex items-center justify-end gap-2">
             <Button variant="outline" className="text-base font-medium gap-1 flex items-center justify-center"> <CircleDollarSign /> Deals</Button>
             <Button variant="outline" className="text-base font-medium gap-1 flex items-center justify-center"> <SquareCheckBig /> Task</Button>
             <Button variant="outline" className="text-base font-medium gap-1 flex items-center justify-center">  <Ratio /> Reports</Button>
@@ -40,7 +42,11 @@ const TopBar = () => {
                </span>
 
             </div>
-         </div>
+         </div> : <>
+
+
+         </>}
+
       </div>
    );
 };
