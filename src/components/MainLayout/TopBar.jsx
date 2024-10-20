@@ -41,10 +41,10 @@ const TopBar = () => {
             <AlignJustify />
          </Button>
          {isDesktop ? <div className="w-full flex items-center justify-end gap-2">
-            <Button variant="outline" className="text-base font-medium gap-1 flex items-center justify-center"> <CircleDollarSign /> Deals</Button>
-            <Button variant="outline" className="text-base font-medium gap-1 flex items-center justify-center"> <SquareCheckBig /> Task</Button>
-            <Button variant="outline" className="text-base font-medium gap-1 flex items-center justify-center">  <Ratio /> Reports</Button>
-            <Button variant="outline" className="text-base font-medium gap-1 flex items-center justify-center"> <LayoutDashboard /> Dashboard</Button>
+            <Button variant="ghost" className="text-base font-medium gap-1 flex items-center justify-center"> <CircleDollarSign /> Deals</Button>
+            <Button variant="ghost" className="text-base font-medium gap-1 flex items-center justify-center"> <SquareCheckBig /> Task</Button>
+            <Button variant="ghost" className="text-base font-medium gap-1 flex items-center justify-center">  <Ratio /> Reports</Button>
+            <Button variant="ghost" className="text-base font-medium gap-1 flex items-center justify-center"> <LayoutDashboard /> Dashboard</Button>
             <div className="flex items-center cursor-pointer  gap-2">
                <div>
                   <UserAvatar size="8px" className="w-8 h-8" name={"Sohag"} />
