@@ -54,7 +54,7 @@ const SearchBox = () => {
                   role="combobox"
 
                   aria-expanded={open}
-                  className="lg:w-80  !py-5 justify-between"
+                  className="lg:w-80  bg-white !py-5 justify-between"
                >
                   {value
                      ? frameworks.find((framework) => framework.value === value)?.label

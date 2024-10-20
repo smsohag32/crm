@@ -13,7 +13,7 @@ import UserAvatar from "../user-avatar/UserAvatar";
 import { CircleDollarSign, CircleUser, DollarSign, LayoutDashboard, Ratio, SquareCheckBig } from "lucide-react";
 const TopBar = () => {
    return (
-      <div className="w-full flex px-5 py-3 items-center border-b border-b-gray-200 gap-6 justify-between">
+      <div className="w-full flex px-5 py-3 items-center border-b border-b-gray-200 bg-white gap-6 justify-between">
 
          <div className="w-full flex items-center justify-between gap-10 ">
             <div>
