@@ -24,7 +24,7 @@ const Login = () => {
       <div className=" min-h-[80vh] lg:py-0 lg:min-h-screen overflow-hidden  flex items-center justify-center">
          <div className="w-full p-5 lg:p-0 flex items-center justify-center">
             <div className="w-full max-w-[470px] border border-gray-200  bg-white  p-8 rounded-[8px]">
-               <p className="text-center uppercase font-semibold text-[28px]">CRM</p>
+               <p className="text-center uppercase font-semibold text-[28px]">CRM Project</p>
                <div className="flex items-start justify-start flex-col mt-6">
                   <h1 className="text-[32px]">Sign In</h1>
                   <p className="text-[#6B6B6B] text-xs font-normal mt-[6px]">Access your Account</p>
@@ -40,8 +40,8 @@ const Login = () => {
                         label="Enter Your Email"
                         type="email"
                         className={`primary-input ${errors.email
-                              ? "ring-red-500 focus:ring-red-500 border-red-500"
-                              : "ring-[#345a93] focus:ring-[#345593] "
+                           ? "ring-red-500 focus:ring-red-500 border-red-500"
+                           : "ring-[#345a93] focus:ring-[#345593] "
                            }`}
                         labelClassName={`transition-all duration-300 ${errors.email ? "text-red-500" : "text-gray-500 peer-focus:text-[#344d93]"
                            }`}
@@ -64,8 +64,8 @@ const Login = () => {
                         type="password"
                         placeholder="******"
                         className={`primary-input ${errors.password
-                              ? "ring-red-500 focus:ring-red-500 border-red-500"
-                              : "ring-[#345a93] focus:ring-[#345593] "
+                           ? "ring-red-500 focus:ring-red-500 border-red-500"
+                           : "ring-[#345a93] focus:ring-[#345593] "
                            }`}
                         labelClassName={`transition-all duration-300 ${errors.password ? "text-red-500" : "text-gray-500 peer-focus:text-[#344d93]"
                            }`}
