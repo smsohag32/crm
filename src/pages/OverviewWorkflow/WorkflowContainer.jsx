@@ -1,36 +1,150 @@
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Column from "./Column";
+import {
+   DndContext,
+   PointerSensor,
+   useSensor,
+   useSensors,
+   closestCenter,
+   DragOverlay,
+} from "@dnd-kit/core";
+import {
+   SortableContext,
+   arrayMove,
+   rectSortingStrategy,
+} from "@dnd-kit/sortable";
 
 const WorkflowContainer = () => {
    const [columnData, setColumnData] = useState([]);
+   const [members, setMembers] = useState([]);
+   const [activeDragItem, setActiveDragItem] = useState(null); // Track the currently dragged item
 
-   // Function to handle adding a new column
+   const columnsId = useMemo(() => columnData.map((col) => col.id), [columnData]);
+
    const handleAdd = () => {
       const newColumn = {
          id: `column-${Date.now()}`,
-         name: `Column ${columnData.length + 1}`
+         name: `Column ${columnData.length + 1}`,
       };
       setColumnData((prev) => [...prev, newColumn]);
+   };
+
+   const sensors = useSensors(
+      useSensor(PointerSensor, {
+         activationConstraint: { distance: 3 },
+      })
+   );
+
+   const handleAddMember = (columnId) => {
+      const newMember = {
+         id: `member-${Date.now()}`,
+         content: `Member ${members.length + 1}`,
+         columnId: columnId,
+      };
+      setMembers((prev) => [...prev, newMember]);
+   };
+
+   const handleDragStart = (event) => {
+      const activeId = event.active.id;
+      const draggedItem = members.find((member) => member.id === activeId);
+
+      if (draggedItem) {
+         setActiveDragItem(draggedItem);
+      }
+   };
+
+   const handleDragEnd = (event) => {
+      const { active, over } = event;
+      setActiveDragItem(null);
+
+      if (!over) return;
+
+      const activeId = active.id;
+      const overId = over.id;
+
+      // Handle column reordering
+      if (columnsId.includes(activeId) && columnsId.includes(overId)) {
+         const oldIndex = columnsId.indexOf(activeId);
+         const newIndex = columnsId.indexOf(overId);
+
+         setColumnData((prev) => arrayMove(prev, oldIndex, newIndex));
+      }
+
+      // Handle member movement
+      const activeMember = members.find((member) => member.id === activeId);
+      const overMember = members.find((member) => member.id === overId);
+      const overColumn = columnData.find((column) => column.id === overId);
+
+      if (activeMember && overMember) {
+         const activeColumnId = activeMember.columnId;
+         const overColumnId = overMember.columnId;
+
+         if (activeColumnId === overColumnId) {
+            const columnMembers = members.filter((m) => m.columnId === activeColumnId);
+            const oldIndex = columnMembers.findIndex((m) => m.id === activeId);
+            const newIndex = columnMembers.findIndex((m) => m.id === overId);
+
+            const reordered = arrayMove(columnMembers, oldIndex, newIndex);
+
+            setMembers((prev) =>
+               prev
+                  .filter((m) => m.columnId !== activeColumnId) // Remove old members
+                  .concat(reordered) // Add reordered members
+            );
+         } else {
+            // Move member between different columns
+            setMembers((prev) =>
+               prev.map((member) =>
+                  member.id === activeId ? { ...member, columnId: overColumnId } : member
+               )
+            );
+         }
+      } else if (activeMember && overColumn) {
+         // Move member to a new column at the end
+         const newColumnId = overColumn.id;
+         setMembers((prev) =>
+            prev.map((member) =>
+               member.id === activeId ? { ...member, columnId: newColumnId } : member
+            )
+         );
+      }
    };
 
    return (
       <div className="px-5 py-3">
          <div className="flex border-b pb-3 items-center justify-end">
-            <Button onClick={handleAdd}>Add New</Button>
+            <Button onClick={handleAdd}>Add New Column</Button>
          </div>
 
-         <div className="overflow-x-auto w-full h-[79vh] ">
-            {columnData && columnData.length > 0 ? (
-               <div className="flex flex-nowrap h-fit w-fit">
-                  {columnData.map((column, index) => (
-                     <Column index={index} column={column} key={column.id} />
+         <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragStart={handleDragStart}
+            onDragEnd={handleDragEnd}
+         >
+            <SortableContext items={columnsId} strategy={rectSortingStrategy}>
+               <div className="flex flex-nowrap overflow-x-auto min-w-fit h-[79vh]">
+                  {columnData.map((column) => (
+                     <Column
+                        key={column.id}
+                        column={column}
+                        members={members.filter((member) => member.columnId === column.id)}
+                        handleAddMember={handleAddMember}
+                     />
                   ))}
                </div>
-            ) : (
-               <p className="text-center">Empty</p>
-            )}
-         </div>
+            </SortableContext>
+
+            {/* DragOverlay rendering */}
+            <DragOverlay>
+               {activeDragItem && (
+                  <div className="border cursor-move rounded-[8px] p-4 bg-gray-100 shadow-lg">
+                     {activeDragItem.content}
+                  </div>
+               )}
+            </DragOverlay>
+         </DndContext>
       </div>
    );
 };
