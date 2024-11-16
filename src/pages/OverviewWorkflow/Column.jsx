@@ -22,7 +22,7 @@ const Column = ({ column, handleAddMember, members }) => {
          ref={setNodeRef}
          style={style}
 
-         className="w-[340px] max-w-w-fit rounded-sm h-[70vh] overflow-y-auto p-2 border border-gray-300 bg-white"
+         className=" flex-shrink-0 w-[300px] mx-2 rounded-sm h-[70vh] overflow-y-auto p-2 border border-gray-300 bg-white"
       >
          <div  {...attributes}
             {...listeners} className="flex cursor-move items-center border-b pb-2 gap-4 justify-between">

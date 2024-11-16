@@ -16,9 +16,18 @@ import {
 } from "@dnd-kit/sortable";
 
 const WorkflowContainer = () => {
-   const [columnData, setColumnData] = useState([]);
-   const [members, setMembers] = useState([]);
-   const [activeDragItem, setActiveDragItem] = useState(null); // Track the currently dragged item
+   const [columnData, setColumnData] = useState([
+      { id: "column-1", name: "Happy Group" },
+      { id: "column-2", name: "It Group" },
+      { id: "column-3", name: "Sky Group" },
+   ]);
+   const [members, setMembers] = useState([
+      { id: "member-1", content: "Sumon 1", columnId: "column-1" },
+      { id: "member-2", content: "Member 2", columnId: "column-1" },
+      { id: "member-3", content: "Member 3", columnId: "column-2" },
+      { id: "member-4", content: "Member 4", columnId: "column-3" },
+   ]);
+   const [activeDragItem, setActiveDragItem] = useState(null);
 
    const columnsId = useMemo(() => columnData.map((col) => col.id), [columnData]);
 
@@ -113,7 +122,7 @@ const WorkflowContainer = () => {
 
    return (
       <div className="px-5 py-3">
-         <div className="flex border-b pb-3 items-center justify-end">
+         <div className="flex border-b pb-3  items-center justify-end">
             <Button onClick={handleAdd}>Add New Column</Button>
          </div>
 
@@ -124,7 +133,7 @@ const WorkflowContainer = () => {
             onDragEnd={handleDragEnd}
          >
             <SortableContext items={columnsId} strategy={rectSortingStrategy}>
-               <div className="flex flex-nowrap overflow-x-auto min-w-fit h-[79vh]">
+               <div className="flex flex-nowrap overflow-x-auto h-[79vh]">
                   {columnData.map((column) => (
                      <Column
                         key={column.id}
