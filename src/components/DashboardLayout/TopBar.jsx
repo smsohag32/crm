@@ -51,22 +51,22 @@ export default function TopBar({ toggle, setToggle }) {
 
    return (
       <div
-         className='flex relative w-full transition-all duration-300 items-center bg-gradient-to-bl rounded-b-[16px] from-[#8C3493] to-[#431879]  top-0 justify-between px-6 lg:px-7 border-b border-b-gray-200 z-50 bg-white py-3'
+         className='flex relative w-full transition-all duration-300 items-center bg-gradient-to-bl   top-0 justify-between px-6 lg:px-7 border-b border-b-gray-200 z-50 bg-white py-3'
          style={{
 
             height: '80px',
 
-         }}
+      }}
       >
          <div className='flex items-center gap-8'>
-            <button onClick={() => setToggle(!toggle)} className='text-white'>
+            <button onClick={() => setToggle(!toggle)} className='text-[#1d1d1d]'>
                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                </svg>
             </button>
-            <Link to={'/'} className='text-[20px] text-white uppercase opacity-75 font-medium'>View Stat</Link>
+            <Link to={'/'} className='text-[20px] text-[#1d1d1d] uppercase opacity-75 font-medium'>Dashboard</Link>
          </div>
-         <div className='text-white pe-1'>
+         <div className='text-[#1d1d1d] pe-1'>
 
             <FullscreenButton />
          </div>

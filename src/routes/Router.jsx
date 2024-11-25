@@ -1,7 +1,11 @@
+import DashboardLayout from "@/components/DashboardLayout/DashboardLayout";
 import Main from "@/layouts/Main";
 import Login from "@/pages/authentication/Login";
-import Landing from "@/pages/landing/Landing";
-import WorkflowContainer from "@/pages/OverviewWorkflow/WorkflowContainer";
+import ListOfContacts from "@/pages/Contacts/ListOfContacts";
+import Overview from "@/pages/dashboard/Overview/Overview";
+import Deals from "@/pages/Deals/Deals";
+import DealsContainer from "@/pages/DealsContainer/DealsContainer";
+import TasksContainer from "@/pages/Tasks/TasksContainer";
 import { createBrowserRouter } from "react-router-dom";
 
 export const router = createBrowserRouter([
@@ -11,7 +15,19 @@ export const router = createBrowserRouter([
       children: [
          {
             path: "/",
-            element: <WorkflowContainer />,
+            element: <DealsContainer />,
+         },
+         {
+            path: "/deals",
+            element: <Deals />,
+         },
+         {
+            path: "/tasks",
+            element: <TasksContainer />,
+         },
+         {
+            path: "/contacts",
+            element: <ListOfContacts />,
          },
 
       ],
@@ -19,5 +35,15 @@ export const router = createBrowserRouter([
    {
       path: "/authentication/login",
       element: <Login />,
+   },
+   {
+      path: "/dashboard",
+      element: <DashboardLayout />,
+      children: [
+         {
+            path: "/dashboard",
+            element: <Overview />
+         }
+      ]
    },
 ]);

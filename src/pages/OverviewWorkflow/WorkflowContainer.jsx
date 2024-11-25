@@ -123,7 +123,7 @@ const WorkflowContainer = () => {
    return (
       <div className="px-5 py-3">
          <div className="flex border-b pb-3  items-center justify-end">
-            <Button onClick={handleAdd}>Add New Column</Button>
+         <Button onClick={handleAdd}>Add New Column</Button>
          </div>
 
          <DndContext

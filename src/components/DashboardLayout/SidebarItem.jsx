@@ -39,8 +39,8 @@ const SidebarItem = ({ to, label, subItems, isOpen, onToggle, icon, hoverIcon, i
             onClick={handleClick}
             onMouseEnter={() => setIsHovered(true)} // Set hover state on mouse enter
             onMouseLeave={() => setIsHovered(false)} // Reset hover state on mouse leave
-            className={`rounded-[8px] text-[16px] group whitespace-nowrap transition-all w-full font-normal border-b-2 border-b-transparent py-[10px] ps-[18px] pe-[12px] cursor-pointer
-               ${isActive ? "bg-[#FEF6FF]  !border-b-[#8C3493]" : "hover:border-b-[#8C3493] hover:bg-[#FEF6FF]"}`}
+            className={`rounded-[4px] text-[16px] group whitespace-nowrap transition-all w-full font-normal border-b-2 border-b-transparent py-[10px] ps-[18px] pe-[12px] cursor-pointer
+               ${isActive ? "bg-[#f6f9ff] text-blue-800 font-semibold  " : " hover:bg-[#f6f9ff]"}`}
          >
             <div className="w-full bg-transparent">
                <div className="flex items-center w-full bg-transparent gap-[16px] h-full">
@@ -49,12 +49,7 @@ const SidebarItem = ({ to, label, subItems, isOpen, onToggle, icon, hoverIcon, i
                      {label}
                   </div>
 
-                  {/* Conditionally show hoverIcon when hovered or active */}
-                  {icon2 && (
-                     <span>
-                        {isHovered || isActive ? hoverIcon : icon2}
-                     </span>
-                  )}
+
 
                   {subItems && (
                      <span
@@ -97,8 +92,8 @@ const SidebarItem = ({ to, label, subItems, isOpen, onToggle, icon, hoverIcon, i
                            <div onClick={() => toggleResubItems(index)}>
                               <NavLink
                                  className={`rounded-[4px] whitespace-nowrap text-[20px] font-normal pl-[24px] flex items-center gap-[4px] py-[10px] pe-[12px] cursor-pointer
-                                    ${subItemActive ? "bg-[#FEF6FF] border-b-2 border-[#8C3493]" : ""}
-                                    hover:bg-[#FEF6FF] hover:border-b-2 hover:border-[#8C3493]`} // Regular border color for hover
+                                    ${subItemActive ? "bg-[#f6f9ff]" : ""}
+                                    hover:bg-[#f6f9ff] `} // Regular border color for hover
                                  to={subItem.to}
                               >
                                  <span className={subItemActive ? "text-blue-600" : ""}> {subItem.icon}</span> {subItem.label}

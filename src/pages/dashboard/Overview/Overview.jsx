@@ -1,9 +1,8 @@
-import SuperAgentOverview from "./SuperAgentOverview/SuperAgentOverview";
 
 const Overview = () => {
    return (
       <div className="w-full">
-         <SuperAgentOverview />
+         <p>Overview</p>
       </div>
    );
 };
