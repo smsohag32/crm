@@ -1,8 +1,11 @@
-import DashboardLayout from "@/components/DashboardLayout/DashboardLayout";
+
+import Dashboard from "@/layouts/Dashboard";
 import Main from "@/layouts/Main";
 import Login from "@/pages/authentication/Login";
 import ListOfContacts from "@/pages/Contacts/ListOfContacts";
 import Overview from "@/pages/dashboard/Overview/Overview";
+import Teams from "@/pages/dashboard/Teams/Teams";
+import UserManagement from "@/pages/dashboard/UserManagement/UserManagement";
 import Deals from "@/pages/Deals/Deals";
 import DealsContainer from "@/pages/DealsContainer/DealsContainer";
 import TasksContainer from "@/pages/Tasks/TasksContainer";
@@ -38,11 +41,19 @@ export const router = createBrowserRouter([
    },
    {
       path: "/dashboard",
-      element: <DashboardLayout />,
+      element: <Dashboard />,
       children: [
          {
             path: "/dashboard",
             element: <Overview />
+         },
+         {
+            path: "/dashboard/teams",
+            element: <Teams />
+         },
+         {
+            path: "/dashboard/user-management",
+            element: <UserManagement />
          }
       ]
    },

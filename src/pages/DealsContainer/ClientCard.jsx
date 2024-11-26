@@ -29,9 +29,9 @@ const ClientCard = ({ client, isOverlay = false }) => {
             } ${isOverlay ? "opacity-90 scale-105" : ""}`}
       >
          <div className="flex items-start gap-1">
-            <UserAvatar className="border text-des" />
+            <UserAvatar className="border bg-gray-100 text-des" />
             <div className="flex items-start flex-1 gap-2">
-               <UserAvatar className="border text-des" />
+               <UserAvatar className="border bg-gray-100 text-des" />
                <div>
                   <p className="line-clamp-1 text-title text-base font-medium">{client.name}</p>
                   <p className="text-des text-sm">{client.status}</p>

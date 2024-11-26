@@ -23,7 +23,7 @@ const DashboardLayout = ({ children }) => {
                   setToggle={setToggle}
                />
             </div>
-            <div className="px-6 py-4">{children}</div>
+            <div className="px-4 py-2">{children}</div>
          </div>
       </div>
    );

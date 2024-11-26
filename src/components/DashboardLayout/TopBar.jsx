@@ -51,12 +51,12 @@ export default function TopBar({ toggle, setToggle }) {
 
    return (
       <div
-         className='flex relative w-full transition-all duration-300 items-center bg-gradient-to-bl   top-0 justify-between px-6 lg:px-7 border-b border-b-gray-200 z-50 bg-white py-3'
+         className='flex relative w-full transition-all duration-300 items-center bg-gradient-to-bl   top-0 justify-between px-4 lg:px-5 border-b border-b-gray-200 z-50 bg-white py-3'
          style={{
 
-            height: '80px',
+            height: '65px',
 
-      }}
+         }}
       >
          <div className='flex items-center gap-8'>
             <button onClick={() => setToggle(!toggle)} className='text-[#1d1d1d]'>
@@ -64,7 +64,7 @@ export default function TopBar({ toggle, setToggle }) {
                   <path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                </svg>
             </button>
-            <Link to={'/'} className='text-[20px] text-[#1d1d1d] uppercase opacity-75 font-medium'>Dashboard</Link>
+            <Link to={'/'} className='text-[20px] text-title uppercase opacity-75 font-medium'>Dashboard</Link>
          </div>
          <div className='text-[#1d1d1d] pe-1'>
 
