@@ -50,6 +50,8 @@ export default {
                4: "hsl(var(--chart-4))",
                5: "hsl(var(--chart-5))",
             },
+            des: "#6B6B6B",
+            title: "#222222",
          },
       },
    },

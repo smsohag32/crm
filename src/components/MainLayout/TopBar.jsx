@@ -72,30 +72,31 @@ const TopBar = () => {
                         CRM
                      </Link>
                   </div>
-                  <div className="w-full flex flex-col mt-6 gap-2 h-full">
+                  <div className="w-full flex flex-col mt-6 gap-3 h-full">
                      <NavLink
                         to="/deals"
-                        className={({ isActive }) => `text-base text-start font-medium gap-1 flex items-start py-2 px-3 border border-gray-200 ${isActive ? activeClass : ''}`}>
+                        className={({ isActive }) => `text-base border-b py-3 font-medium gap-2 flex items-center lg:justify-center ${isActive ? activeClass : ''}`}>
                         <CircleDollarSign /> Deals
                      </NavLink>
 
                      <NavLink
-                        to="/task"
-                        className={({ isActive }) => `text-base text-start font-medium gap-1 flex items-start py-2 px-3 border border-gray-200 ${isActive ? activeClass : ''}`}>
-                        <SquareCheckBig /> Task
+                        to="/tasks"
+                        className={({ isActive }) => `text-base border-b py-3 font-medium gap-2 flex items-center lg:justify-center ${isActive ? activeClass : ''}`}>
+                        <SquareCheckBig /> Tasks
+                     </NavLink>
+                     <NavLink
+                        to="/contacts"
+                        className={({ isActive }) => `text-base border-b py-3 font-medium gap-2 flex items-center lg:justify-center ${isActive ? activeClass : ''}`}>
+                        <Contact /> Contacts
                      </NavLink>
 
-                     <NavLink
-                        to="/reports"
-                        className={({ isActive }) => `text-base text-start font-medium gap-1 flex items-start py-2 px-3 border border-gray-200 ${isActive ? activeClass : ''}`}>
-                        <Ratio /> Reports
-                     </NavLink>
 
                      <NavLink
                         to="/dashboard"
-                        className={({ isActive }) => `text-base text-start font-medium gap-1 flex items-start py-2 px-3 border border-gray-200 ${isActive ? activeClass : ''}`}>
+                        className={({ isActive }) => `text-base border-b py-3 font-medium gap-2 flex items-center lg:justify-center ${isActive ? activeClass : ''}`}>
                         <LayoutDashboard /> Dashboard
                      </NavLink>
+
 
                      <div className="flex items-center px-3 mt-auto cursor-pointer gap-2">
                         <div className="border rounded-full border-gray-200 ">

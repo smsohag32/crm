@@ -86,6 +86,12 @@
    .primary-box-shadow {
       box-shadow: 0px 4px 15.8px 0px #00000014;
    }
+   .des-text {
+      @apply text-[#6B6B6B];
+   }
+   .title-text {
+      @apply text-[#222222];
+   }
    .secondary-bg {
       @apply bg-[#FEF6FF];
    }

@@ -14,7 +14,7 @@ const ListOfContacts = () => {
          email: "johndoe@example.com",
          contact: "+1 234 567 890",
          image: "https://via.placeholder.com/50",
-         labels: "VIP, Frequent Buyer", // Labels as a string
+         labels: "CLIENT", // Labels as a string
       },
       {
          id: 2,
@@ -22,7 +22,7 @@ const ListOfContacts = () => {
          email: "janesmith@example.com",
          contact: "+1 987 654 321",
          image: "https://via.placeholder.com/50",
-         labels: "New Customer",
+         labels: "CLIENT",
       },
       {
          id: 3,
@@ -30,7 +30,7 @@ const ListOfContacts = () => {
          email: "alicej@example.com",
          contact: "+1 555 123 456",
          image: "https://via.placeholder.com/50",
-         labels: "Preferred, Frequent Buyer",
+         labels: "CLIENT",
       },
       {
          id: 4,
@@ -69,16 +69,16 @@ const ListOfContacts = () => {
          </div>
 
          <div className="w-full mt-4 flex flex-col">
-         <div className=" h-[68vh] min-w-full relative overflow-y-auto overflow-x-auto">
+            <div className=" h-[68vh] min-w-full relative overflow-y-auto overflow-x-auto">
                <table className="overflow-auto border-0 m-0 w-full min-w-full">
                   <thead className="rounded-md border-none uppercase font-[500] text-center">
-                     <tr className="border-none bg-[#979faa50] rounded-md text-[16px] font-[500]">
+                     <tr className="border-none bg-[#4980ce23] shadow-sm backdrop-blur   rounded-md text-[15px] font-[400]">
 
-                        <th className="px-6 py-3 text-start text-[#3b3d41]">Name</th>
-                        <th className="px-6 py-3 text-start text-[#3b3d41]">Phone</th>
-                        <th className="px-6 py-3 text-start text-[#3b3d41]">Email</th>
-                        <th className="px-6 py-3 text-start text-[#3b3d41]">Label</th>
-                        <th className="px-6 py-3 text-center text-[#3b3d41]">Action</th>
+                        <th className="px-6 py-2 text-start font-medium text-[#3b3d41]">Name</th>
+                        <th className="px-6 py-2 text-start font-medium text-[#3b3d41]">Phone</th>
+                        <th className="px-6 py-2 text-start font-medium text-[#3b3d41]">Email</th>
+                        <th className="px-6 py-2 text-start font-medium text-[#3b3d41]">Label</th>
+                        <th className="px-6 py-2 text-center font-medium text-[#3b3d41]">Action</th>
                      </tr>
                   </thead>
                   <tbody className="bg-white">
@@ -99,8 +99,8 @@ const ListOfContacts = () => {
                            <td className="px-6 py-3 text-base font-medium text-[#6B6B6B] text-start">
                               {data?.email || "Not Set"}
                            </td>
-                           <td className="px-6 py-3 text-base font-medium text-[#6B6B6B] text-start">
-                              {data?.labels || "Not Set"}
+                           <td className="px-6 py-3 text-sm font-medium flex items-start text-des text-start">
+                              <p className="text-des bg-des bg-opacity-20 px-2 rounded-sm p"> {data?.labels || "Not Set"}</p>
                            </td>
 
                            <td className="px-6 py-3 text-center">
