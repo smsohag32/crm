@@ -7,8 +7,9 @@ import { DollarSign, Filter, List, Plus } from "lucide-react";
 import DealStage from "./DealStage";
 import ClientCard from "./ClientCard";
 import { clients, stages } from "@/data/data";
-
+import AddClient from "./AddClient";
 const DealsContainer = () => {
+   const [isAdd, setIsAdd] = useState(false)
    const [stageData, setStageData] = useState(stages);
    const [activeCard, setActiveCard] = useState(null); // Track the currently dragged card
 
@@ -70,6 +71,9 @@ const DealsContainer = () => {
       setActiveCard(null);
    };
 
+
+
+
    return (
       <div>
          <div className="flex items-center flex-col lg:flex-row justify-between gap-6 w-full">
@@ -87,7 +91,7 @@ const DealsContainer = () => {
                <Button variant="outline" className="flex items-center text-sm px-2.5 gap-2">
                   <Filter size={16} />Filters
                </Button>
-               <Button className="flex items-center text-sm px-2.5 py-2 gap-2">
+               <Button onClick={() => setIsAdd(true)} className="flex items-center text-sm px-2.5 py-2 gap-2">
                   <Plus size={16} /> Add New
                </Button>
             </div>
@@ -118,6 +122,8 @@ const DealsContainer = () => {
                ) : null}
             </DragOverlay>
          </DndContext>
+
+         <AddClient isOpen={isAdd} setOpen={setIsAdd} />
       </div>
    );
 };

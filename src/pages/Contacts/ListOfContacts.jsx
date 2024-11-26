@@ -3,10 +3,12 @@ import SearchInput from "@/components/SearchBox/SearchInput";
 import { Button } from "@/components/ui/button";
 import UserAvatar from "@/components/user-avatar/UserAvatar";
 
-import { ContactRound, Plus } from "lucide-react";
+import { ContactRound, Plus, PlusCircle } from "lucide-react";
 import { useState } from "react";
+import AddContact from "./AddContact";
 
 const ListOfContacts = () => {
+   const [isOpen, setOpen] = useState(false)
    const [contactData, setContactData] = useState([
       {
          id: 1,
@@ -57,13 +59,13 @@ const ListOfContacts = () => {
    return (
       <div>
          <div className="flex lg:items-center gap-4 flex-col lg:flex-row justify-between w-full">
-            <h2 className="text-[24px] flex items-center gap-2">
+            <h2 className="text-[24px] text-des flex items-center gap-2">
                <ContactRound /> Contacts List
             </h2>
             <div className="flex lg:items-center flex-col lg:flex-row gap-6">
                <SearchInput />
-               <Button className="max-w-[140px]">
-                  <Plus /> Add new
+               <Button onClick={() => setOpen(true)} className="max-w-[140px] gap-1 text-sm">
+                  <PlusCircle size={15} /> Add new
                </Button>
             </div>
          </div>
@@ -72,8 +74,7 @@ const ListOfContacts = () => {
             <div className=" h-[68vh] min-w-full relative overflow-y-auto overflow-x-auto">
                <table className="overflow-auto border-0 m-0 w-full min-w-full">
                   <thead className="rounded-md border-none uppercase font-[500] text-center">
-                     <tr className="border-none bg-[#4980ce23] shadow-sm backdrop-blur   rounded-md text-[15px] font-[400]">
-
+                     <tr className="border-none bg-[#4980ce23] shadow-sm backdrop-blur   rounded-md text-[14px] font-[400]">
                         <th className="px-6 py-2 text-start font-medium text-[#3b3d41]">Name</th>
                         <th className="px-6 py-2 text-start font-medium text-[#3b3d41]">Phone</th>
                         <th className="px-6 py-2 text-start font-medium text-[#3b3d41]">Email</th>
@@ -148,6 +149,9 @@ const ListOfContacts = () => {
             </div>
 
          </div>
+
+
+         <AddContact isOpen={isOpen} setOpen={setOpen} />
       </div>
    );
 };
