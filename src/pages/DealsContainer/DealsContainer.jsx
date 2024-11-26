@@ -5,7 +5,7 @@ import DealStage from "./DealStage";
 const DealsContainer = () => {
    return (
       <div>
-         <div className="flex items-center justify-between gap-6 w-full">
+         <div className="flex items-center flex-col lg:flex-row justify-between gap-6 w-full">
             <h2 className="flex items-center gap-2"><span className="text-[20px] flex items-center gap-1">FBD : New Deals</span> <span className="bg-gray-200 flex items-center px-1  text-gray-700"><DollarSign size={16} />1455,00 </span> <span className="bg-gray-200 flex items-center px-1  text-gray-700">5</span></h2>
             <div className="flex items-center gap-2">
 
