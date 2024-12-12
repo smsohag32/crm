@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import logo from "@/assets/icons/logo.png"
 import SidebarItem from './SidebarItem';
-import { LayoutDashboard, Users, UserSearchIcon } from 'lucide-react';
+import { LayoutDashboard, Users, UserSearchIcon, UserSquare, UsersRound } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export default function Sidebar({ toggle, setToggle }) {
@@ -61,20 +61,15 @@ export default function Sidebar({ toggle, setToggle }) {
          to: "/dashboard/user-management",
          label: "User Management",
 
-         icon2: <svg width="8" height="14" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M1 13L7 7L1 1" stroke="url(#paint0_linear_809_155)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            <defs>
-               <linearGradient id="paint0_linear_809_155" x1="1" y1="1" x2="10.6" y2="5.8" gradientUnits="userSpaceOnUse">
-                  <stop stopColor="#6188f1" />
-                  <stop offset="1" stopColor="#6188f1" />
-               </linearGradient>
-            </defs>
-         </svg>
-         ,
          icon: <UserSearchIcon />
          ,
       },
-
+      {
+         to: "/dashboard/clients",
+         label: "Clients",
+         icon: <UserSquare />
+         ,
+      },
 
    ];
 

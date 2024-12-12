@@ -6,23 +6,23 @@ import ListOfContacts from "@/pages/Contacts/ListOfContacts";
 import Overview from "@/pages/dashboard/Overview/Overview";
 import Teams from "@/pages/dashboard/Teams/Teams";
 import UserManagement from "@/pages/dashboard/UserManagement/UserManagement";
-import Deals from "@/pages/Deals/Deals";
 import DealsContainer from "@/pages/DealsContainer/DealsContainer";
 import TasksContainer from "@/pages/Tasks/TasksContainer";
 import { createBrowserRouter } from "react-router-dom";
+import AuthRoute from "./AuthRoute";
+import ClientList from "@/pages/dashboard/Clients/ClientList";
 
 export const router = createBrowserRouter([
    {
       path: "/",
-      element: <Main />,
+      element:
+         <AuthRoute userTypes={["admin", "user", "manager"]}><Main /></AuthRoute>
+      // <Main />
+      ,
       children: [
          {
             path: "/",
             element: <DealsContainer />,
-         },
-         {
-            path: "/deals",
-            element: <Deals />,
          },
          {
             path: "/tasks",
@@ -54,6 +54,10 @@ export const router = createBrowserRouter([
          {
             path: "/dashboard/user-management",
             element: <UserManagement />
+         },
+         {
+            path: "/dashboard/clients",
+            element: <ClientList />
          }
       ]
    },

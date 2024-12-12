@@ -1,13 +1,15 @@
+import { getCookie, setCookie } from "@/utils/helper";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { logoutUser } from "./authSlice";
 
 const baseQueryWithAuth = async (args, api, extraOptions) => {
    const baseQuery = fetchBaseQuery({
-      baseUrl: "https://dummyjson.com",
+      baseUrl: "http://127.0.0.1:8000",
       prepareHeaders: (headers) => {
-         const token = localStorage.getItem("vs-token");
+         const accessToken = getCookie("access-token");
 
-         if (token) {
-            headers.set("Authorization", `Bearer ${token}`);
+         if (accessToken) {
+            headers.set("Authorization", `Bearer ${accessToken}`);
          }
          return headers;
       },
@@ -16,7 +18,33 @@ const baseQueryWithAuth = async (args, api, extraOptions) => {
    let result = await baseQuery(args, api, extraOptions);
 
    if (result.error && (result.error.status === 401 || result.error.status === 403)) {
-      window.location.href = "/authentication/login";
+      const refreshToken = getCookie("refresh_token");
+
+      if (refreshToken) {
+         const refreshResult = await fetchBaseQuery({
+            baseUrl: "http://127.0.0.1:8000",
+         })(
+            {
+               url: "/api/users/auth/token/refresh",
+               method: "POST",
+               body: { refresh: refreshToken },
+            },
+            api,
+            extraOptions
+         );
+
+         if (refreshResult.data) {
+            const { access } = refreshResult.data;
+            setCookie("access_token", access);
+            result = await baseQuery(args, api, extraOptions);
+         } else {
+            api.dispatch(logoutUser()); // Use api.dispatch here
+            window.location.href = "/authentication/login";
+         }
+      } else {
+         api.dispatch(logoutUser()); // Use api.dispatch here
+         window.location.href = "/authentication/login";
+      }
    }
 
    return result;
@@ -25,6 +53,6 @@ const baseQueryWithAuth = async (args, api, extraOptions) => {
 export const apiSlice = createApi({
    reducerPath: "api",
    baseQuery: baseQueryWithAuth,
-   tagTypes: ["dsr", "super_agent"],
-   endpoints: (builder) => ({}),
+   tagTypes: ["clients", "users", "deals", "tasks"],
+   endpoints: () => ({}),
 });

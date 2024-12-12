@@ -75,6 +75,7 @@
          text-black
          border-gray-400
          transition-all
+        !bg-[#ffffff]
          duration-300
          focus:ring-[#4A90E2]
          focus:ring-1

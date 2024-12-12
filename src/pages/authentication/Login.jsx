@@ -1,31 +1,55 @@
-import { useGetTestQuery } from "@/redux-store/api/testApi";
+import logo from "@/assets/icons/logo.png"
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { FloatingLabelInput } from "@/components/ui/floating-label-input";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { loginUser } from "@/redux-store/slice/authSlice";
+import { toast } from "sonner";
 const Login = () => {
-   const { data, error } = useGetTestQuery();
+   const [loading, setLoading] = useState(false)
    const navigate = useNavigate();
-
+   const dispatch = useDispatch()
    const {
       register,
       handleSubmit,
       formState: { errors },
    } = useForm();
+   const onSubmit = async (data) => {
+      const { email, password } = data;
+      setLoading(true);
+      try {
+         const resultAction = await dispatch(loginUser({ email, password })).unwrap();
 
-   const onSubmit = (data) => {
-      console.log(data);
-      navigate("/");
+         if (resultAction && (resultAction?.httpStatusCode === 302 || resultAction?.httpStatusCode === 200)) {
+            toast.success("Login successful");
+            navigate("/");
+         } else {
+            console.log(resultAction)
+            toast.error(`${resultAction?.message}`);
+         }
+      } catch (error) {
+         console.log(error)
+         if (error.response && error.response.status === 400) {
+            toast.error("Login failed: ", error.response.data || "Invalid login credentials");
+         } else {
+            toast.error("Login failed due to an unexpected error");
+         }
+      } finally {
+         setLoading(false);
+      }
    };
 
    return (
       <div className=" min-h-[80vh] lg:py-0 lg:min-h-screen overflow-hidden  flex items-center justify-center">
          <div className="w-full p-5 lg:p-0 flex items-center justify-center">
             <div className="w-full max-w-[470px] border border-gray-200  bg-white  p-8 rounded-[8px]">
-               <p className="text-center uppercase font-semibold text-[28px]">CRM Project</p>
-               <div className="flex items-start justify-start flex-col mt-6">
+               <div to={"/"} className="flex items-center justify-center text-[20px] font-medium gap-2">
+                  <img className="w-24 grayscale-1" src={logo} alt="crm" />
+               </div>
+               <div className="flex items-start justify-start flex-col mt-4">
                   <h1 className="text-[32px]">Sign In</h1>
                   <p className="text-[#6B6B6B] text-xs font-normal mt-[6px]">Access your Account</p>
                </div>
@@ -98,7 +122,8 @@ const Login = () => {
                   </div>
                   <div className="mt-6">
                      <Button
-                        className="w-full text-base  font-medium py-3"
+                        disabled={loading}
+                        className="w-full disabled:opacity-50 disabled:cursor-not-allowed text-base  font-medium py-3"
                         size="xl">
                         Sign In
                      </Button>

@@ -5,8 +5,8 @@ const SearchInput = ({ handleSearch }) => {
          <input
             type="text"
             placeholder="Search"
-            onChange={handleSearch}
-            className="py-[6px] ps-[50px] primary-input pe-5 w-full outline-none border border-[#006837] rounded-[4px]"
+            onChange={(e) => handleSearch(e.target.value)}
+            className="py-[6px] ps-[40px] primary-input pe-5 w-full outline-none border border-[#006837] rounded-[4px]"
          />
          <span className="absolute left-4 transform -translate-y-1/2 top-1/2 ">
             <svg

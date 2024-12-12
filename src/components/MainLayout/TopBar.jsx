@@ -1,9 +1,9 @@
 import { Link, NavLink } from "react-router-dom"; // Import NavLink
-import { CircleDollarSign, SquareCheckBig, Ratio, LayoutDashboard, AlignJustify, Contact } from "lucide-react";
+import { CircleDollarSign, SquareCheckBig, LayoutDashboard, AlignJustify, Contact } from "lucide-react";
 import UserAvatar from "../user-avatar/UserAvatar";
 import { useState } from "react";
 import { useMediaQuery } from "@/hooks/use-media-query";
-import SearchBox from "./SearchBox";
+
 import { Button } from "../ui/button";
 import { Sheet, SheetContent } from "../ui/sheet";
 import SearchInput from "../SearchBox/SearchInput";
