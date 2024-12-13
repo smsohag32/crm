@@ -1,63 +1,118 @@
-import CustomPagination from "@/components/pagination/CustomPagination";
 import SearchInput from "@/components/SearchBox/SearchInput";
 import { Button } from "@/components/ui/button";
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import UserAvatar from "@/components/user-avatar/UserAvatar";
 import AddClient from "@/pages/DealsContainer/AddClient";
-import { Filter, UserCheck, UserPlus } from "lucide-react";
-import { useState } from "react";
+import { ChevronLeft, ChevronRight, Edit3, EllipsisVertical, Eye, Trash2, UserCheck, UserPlus } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import {
+   DropdownMenu,
+   DropdownMenuContent,
+   DropdownMenuItem,
+   DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import Loading from "@/components/Loading/Loading";
+import { useDeleteClientMutation, useGetAllClientsQuery, useLazyGetClientsByPageQuery } from "@/redux-store/api/clientsApi";
+import CrmAlert from "@/components/ui/alert";
+import { toast } from "sonner";
 
 const ClientList = () => {
-   const [currentPage, setCurrentPage] = useState(1);
-   const [itemsPerPage] = useState(3);
-   const [isAdd, setIsAdd] = useState(false)
-   const clients = [
-      {
-         id: 10,
-         name: "Asib",
-         contact_number: "4653445",
-         email: "asib@gmail.com",
-         address: "Bashundhara Residential Area, Block -D, Road-4, House - 58,Flat - 6A",
-         relationship_status: "single",
-         employment_status: "Student",
-         income: "5000.00",
-         credit_score: "12.50",
-         spouse: null,
-         created_at: "11-12-2024 11:35AM",
-      },
-      {
-         id: 3,
-         name: "Talha Anik",
-         contact_number: "01710737985",
-         email: "aniktalha@gmail.com",
-         address: "Bashundhara Residential Area, Block -D, Road-4, House - 58,Flat - 6A",
-         relationship_status: "married",
-         employment_status: "Job",
-         income: "5000.00",
-         credit_score: "110.00",
-         spouse: "Mikasa Ackerman",
-         created_at: "11-12-2024 11:27AM",
-      },
-      // Add all other clients here...
-   ];
+   const navigate = useNavigate()
+   const [deleteClient, { isLoading: deleteLoading }] = useDeleteClientMutation()
+   // State to toggle Add Client modal
+   const [isAdd, setIsAdd] = useState(false);
+   const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
+   const [clientToDelete, setClientToDelete] = useState(null);
+   // Pagination state to track next and previous URLs
+   const [paginationUrls, setPaginationUrls] = useState({
+      next: null,
+      prev: null,
+   });
 
-   const totalPages = Math.ceil(clients.length / itemsPerPage);
+   // Lazy query for paginated data fetching
+   const [getClients, { isLoading: isFetching }] = useLazyGetClientsByPageQuery();
 
-   // Calculate the paginated data
-   const paginatedUsers = clients.slice(
-      (currentPage - 1) * itemsPerPage,
-      currentPage * itemsPerPage
-   );
+   // Current page data
+   const [currentPageData, setCurrentPageData] = useState([]);
 
-   const handlePageChange = (page) => {
-      setCurrentPage(page);
+   // Fetch initial client data
+   const { data: clients, isLoading: isInitialLoading, refetch } = useGetAllClientsQuery();
+
+   // Initialize state on initial load
+   useEffect(() => {
+      if (clients) {
+         setCurrentPageData(clients.results);
+         setPaginationUrls({
+            next: clients.next,
+            prev: clients.previous,
+         });
+      }
+   }, [clients]);
+
+   // Fetch next page
+   const handleNextPage = async () => {
+      if (!paginationUrls.next) return;
+      try {
+         const data = await getClients(paginationUrls.next).unwrap();
+         setCurrentPageData(data.results);
+         setPaginationUrls({
+            next: data.next,
+            prev: data.previous,
+         });
+      } catch (error) {
+         console.error("Error fetching next page:", error);
+      }
    };
 
+   const handleDeleteClick = (clientId) => {
+      setClientToDelete(clientId);
+      setIsDeleteAlertOpen(true);
+   };
+
+
+
+   // Fetch previous page
+   const handlePrevPage = async () => {
+      if (!paginationUrls.prev) return;
+      try {
+         const data = await getClients(paginationUrls.prev).unwrap();
+         setCurrentPageData(data.results);
+         setPaginationUrls({
+            next: data.next,
+            prev: data.previous,
+         });
+      } catch (error) {
+         console.error("Error fetching previous page:", error);
+      }
+   };
+
+   // Search functionality placeholder
    const handleSearch = (e) => {
-      console.log(e)
-   }
+      console.log("Search triggered:", e);
+   };
+
+   // Action button handlers
+   const handleView = () => console.log("View action triggered");
+   const handleEdit = () => console.log("Edit action triggered");
+   const handleDeleteConfirm = async () => {
+      console.log(`Deleting client with ID: ${clientToDelete}`);
+      await deleteClient(clientToDelete).unwrap()
+      toast.success("Client Deleted Successfully.")
+      refetch()
+      setIsDeleteAlertOpen(false);
+      setClientToDelete(null);
+   };
+
+   const handleDeleteCancel = () => {
+      setIsDeleteAlertOpen(false);
+      setClientToDelete(null);
+   };
+
+
+
    return (
       <div>
+         {/* Header Section */}
          <div className="flex items-center flex-col lg:flex-row justify-between gap-6 w-full">
             <h2 className="flex text-des text-[20px] items-center font-medium gap-2">
                <UserCheck className="text-des" /> Client List
@@ -71,75 +126,133 @@ const ClientList = () => {
                </Button>
             </div>
          </div>
-         <div className="w-full mt-4 flex flex-col">
-            <div className="h-[68vh] min-w-full relative overflow-y-auto overflow-x-auto">
-               <table className="overflow-auto border-0 m-0 w-full min-w-full">
-                  <thead className="rounded-md border-none uppercase font-[500] text-center">
-                     <tr className="border-none bg-[#4980ce23] shadow-sm backdrop-blur text-[14px] font-[400]">
-                        <th className="px-6 py-2 text-start font-medium text-[#3b3d41]">Name</th>
-                        <th className="px-6 py-2 text-start font-medium text-[#3b3d41]">Contact Number</th>
-                        <th className="px-6 py-2 text-start font-medium text-[#3b3d41]">Address</th>
-                        <th className="px-6 py-2 text-start font-medium text-[#3b3d41]">Income</th>
-                        <th className="px-6 py-2 text-start font-medium text-[#3b3d41]">Credit Score</th>
-                        <th className="px-6 py-2 text-center font-medium text-[#3b3d41]">Action</th>
-                     </tr>
-                  </thead>
-                  <tbody className="bg-white">
-                     {paginatedUsers.map((user) => (
-                        <tr
-                           key={user.id}
-                           className="bg-white border-b-[2px] border-[#E9EDF1] text-[16px]"
-                        >
-                           <td className="px-6 py-3 text-base font-medium text-[#6B6B6B] text-start">
-                              <div className="flex items-center gap-3">
-                                 <UserAvatar
-                                    className="h-8 w-8 border border-title border-opacity-50"
-                                    name={user.user}
-                                    photo={user.photo}
-                                 />
-                                 <div>
-                                    <p className="whitespace-nowrap line-clamp-1 text-title text-base">{user?.name}</p>
-                                    <p className="whitespace-nowrap text-des text-sm line-clamp-1">{user?.email}</p>
-                                 </div>
-                              </div>
-                           </td>
-                           <td className="px-6 py-3 text-base font-medium text-[#6B6B6B] text-start">
-                              {user?.contact_number}
-                           </td>
-                           <td className="px-6 py-3  text-base font-medium text-[#6B6B6B] text-start">
-                              <div className="max-w-[280px]">
-                                 <p className="line-clamp-2">  {user?.address}</p>
-                              </div>
-                           </td>
-                           <td className="px-6 py-3 text-base font-medium text-[#6B6B6B] text-start">
-                              ${user?.income}
-                           </td>
-                           <td className="px-6 py-3 text-base font-medium text-[#6B6B6B] text-start">
-                              {user?.credit_score}
-                           </td>
-                           <td className="px-6 py-3 text-center">
-                              <Button
-                                 variant="ghost"
-                                 type="button"
-                                 className="px-3 py-2 rounded-[8px]"
-                              >
-                                 View
-                              </Button>
-                           </td>
-                        </tr>
-                     ))}
-                  </tbody>
-               </table>
-            </div>
-            <CustomPagination
-               totalData={clients.length}
-               currentPage={currentPage}
-               totalPages={totalPages}
-               onPageChange={handlePageChange}
-            />
-         </div>
-         <AddClient isOpen={isAdd} setOpen={setIsAdd} />
 
+         {/* Main Content */}
+         <div className="w-full mt-4 flex flex-col">
+            {isInitialLoading || isFetching ? (
+               <Loading />
+            ) : (
+               <div className="min-w-full relative overflow-y-auto overflow-x-auto">
+                  {/* Table */}
+                  <table className="overflow-auto border-0 m-0 w-full min-w-full">
+                     <thead className="rounded-md border-none uppercase font-[500] text-center">
+                        <tr className="border-none bg-[#4980ce23] shadow-sm backdrop-blur text-[14px] font-[400]">
+                           <th className="px-6 py-2 text-start font-medium text-[#3b3d41]">Name</th>
+                           <th className="px-6 py-2 text-start font-medium text-[#3b3d41]">Contact Number</th>
+                           <th className="px-6 py-2 text-start font-medium text-[#3b3d41]">Address</th>
+                           <th className="px-6 py-2 text-start font-medium text-[#3b3d41]">Income</th>
+                           <th className="px-6 py-2 text-start font-medium text-[#3b3d41]">Credit Score</th>
+                           <th className="px-6 py-2 text-center font-medium text-[#3b3d41]">Action</th>
+                        </tr>
+                     </thead>
+                     <tbody className="bg-white">
+                        {currentPageData.map((user) => (
+                           <tr key={user.id} className="bg-white border-b-[2px] border-[#E9EDF1] text-[16px]">
+                              <td className="px-6 py-3 text-base font-medium text-[#6B6B6B] text-start">
+                                 <div className="flex items-center gap-3">
+                                    <UserAvatar className="h-8 w-8 border border-title border-opacity-50" name={user.user} photo={user.photo} />
+                                    <div>
+                                       <Link
+                                          className="hover:underline transition-all text-title hover:!text-blue-800 duration-200"
+                                          to={`/dashboard/client/${user?.id}`}
+                                       >
+                                          <p className="whitespace-nowrap line-clamp-1 text-base">{user?.name}</p>
+                                       </Link>
+                                       <p className="whitespace-nowrap text-des text-sm line-clamp-1">{user?.email}</p>
+                                    </div>
+                                 </div>
+                              </td>
+                              <td className="px-6 py-3 text-base font-medium text-[#6B6B6B] text-start">{user?.contact_number}</td>
+                              <td className="px-6 py-3 text-base font-medium text-[#6B6B6B] text-start">
+                                 <div className="max-w-[280px]">
+                                    <p className="line-clamp-2">{user?.address}</p>
+                                 </div>
+                              </td>
+                              <td className="px-6 py-3 text-base font-medium text-[#6B6B6B] text-start">${user?.income}</td>
+                              <td className="px-6 py-3 text-base font-medium text-[#6B6B6B] text-start">{user?.credit_score}</td>
+                              <td className="px-6 py-3 text-center">
+                                 <DropdownMenu>
+                                    <DropdownMenuTrigger className="active:border-none outline-none">
+                                       <Button
+                                          variant="outline"
+                                          type="button"
+                                          className="flex items-center justify-center px-3 py-2 rounded-[8px] hover:bg-gray-100 transition-colors"
+                                       >
+                                          <EllipsisVertical size={18} className="text-gray-600" />
+                                       </Button>
+                                    </DropdownMenuTrigger>
+
+                                    <DropdownMenuContent>
+                                       <DropdownMenuItem
+                                          type="button"
+
+                                          className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 text-gray-700 rounded-md"
+                                          onClick={() => navigate(`/dashboard/client/${user?.id}`)}
+                                       >
+                                          <Eye size={16} className="text-blue-500" />
+                                          <span>View</span>
+                                       </DropdownMenuItem>
+                                       <DropdownMenuItem
+                                          type="button"
+                                          className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 text-gray-700 rounded-md"
+                                          onClick={handleEdit}
+                                       >
+                                          <Edit3 size={16} className="text-green-500" />
+                                          <span>Edit</span>
+                                       </DropdownMenuItem>
+                                       <DropdownMenuItem
+                                          type="button"
+                                          className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 text-gray-700 rounded-md"
+                                          onClick={() => handleDeleteClick(user.id)}
+                                       >
+                                          <Trash2 size={16} className="text-red-500" />
+                                          <span>Delete</span>
+                                       </DropdownMenuItem>
+                                    </DropdownMenuContent>
+
+                                 </DropdownMenu>
+                              </td>
+                           </tr>
+                        ))}
+                     </tbody>
+                  </table>
+
+                  {/* Pagination Buttons */}
+                  <div className="flex gap-6 justify-end p-7">
+                     <Button
+                        variant="outline"
+                        onClick={handlePrevPage}
+                        disabled={!paginationUrls.prev}
+                        style={{ opacity: paginationUrls.prev ? 1 : 0.5 }}
+                        className="flex items-center gap-2"
+                     >
+                        <ChevronLeft size={16} />
+                        Previous
+                     </Button>
+                     <Button
+                        variant="outline"
+                        onClick={handleNextPage}
+                        disabled={!paginationUrls.next}
+                        style={{ opacity: paginationUrls.next ? 1 : 0.5 }}
+                        className="flex items-center gap-2"
+                     >
+                        Next
+                        <ChevronRight size={16} />
+                     </Button>
+                  </div>
+               </div>
+            )}
+         </div>
+
+         {/* Add Client Modal */}
+         <AddClient isOpen={isAdd} setOpen={setIsAdd} refetch={refetch} />
+         <CrmAlert
+            isOpen={isDeleteAlertOpen}
+            message="Delete Client"
+            description="Are you sure you want to delete this client? This action cannot be undone."
+            handleClose={handleDeleteCancel}
+            handleConfirm={handleDeleteConfirm}
+         />
       </div>
    );
 };

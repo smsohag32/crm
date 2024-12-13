@@ -12,8 +12,8 @@ const AuthRoute = ({ userTypes, children }) => {
    if (isLoading) {
       return <Loading />;
    }
-
-   if (!user && user?.userType && !userTypes?.includes(user.userType)) {
+   // && user?.userType && userTypes?.includes(user.userType)
+   if (user) {
       return children;
    }
 

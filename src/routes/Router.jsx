@@ -11,6 +11,7 @@ import TasksContainer from "@/pages/Tasks/TasksContainer";
 import { createBrowserRouter } from "react-router-dom";
 import AuthRoute from "./AuthRoute";
 import ClientList from "@/pages/dashboard/Clients/ClientList";
+import ClientDetails from "@/pages/dashboard/Clients/ClientDetails";
 
 export const router = createBrowserRouter([
    {
@@ -58,6 +59,10 @@ export const router = createBrowserRouter([
          {
             path: "/dashboard/clients",
             element: <ClientList />
+         },
+         {
+            path: "/dashboard/client/:id",
+            element: <ClientDetails />
          }
       ]
    },

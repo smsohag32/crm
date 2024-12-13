@@ -23,7 +23,7 @@ const Login = () => {
       try {
          const resultAction = await dispatch(loginUser({ email, password })).unwrap();
 
-         if (resultAction && (resultAction?.httpStatusCode === 302 || resultAction?.httpStatusCode === 200)) {
+         if (resultAction?.tokens) {
             toast.success("Login successful");
             navigate("/");
          } else {
@@ -31,11 +31,13 @@ const Login = () => {
             toast.error(`${resultAction?.message}`);
          }
       } catch (error) {
-         console.log(error)
-         if (error.response && error.response.status === 400) {
-            toast.error("Login failed: ", error.response.data || "Invalid login credentials");
+         console.log("eerrr ", error)
+
+
+         if (error) {
+            toast.error(error || "Invalid login credentials");
          } else {
-            toast.error("Login failed due to an unexpected error");
+            toast.error("Login failed due to Invalid Credentials.");
          }
       } finally {
          setLoading(false);

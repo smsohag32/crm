@@ -34,7 +34,7 @@ const TopBar = () => {
          {isDesktop ? (
             <div className="w-full flex items-center text-des justify-end  gap-8">
                <NavLink
-                  to="/deals"
+                  to="/"
                   className={({ isActive }) => `text-base font-medium gap-1.5 flex items-center justify-center ${isActive ? activeClass : ''}`}>
                   <CircleDollarSign size={18} /> Deals
                </NavLink>

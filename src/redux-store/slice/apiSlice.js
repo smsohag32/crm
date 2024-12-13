@@ -6,7 +6,7 @@ const baseQueryWithAuth = async (args, api, extraOptions) => {
    const baseQuery = fetchBaseQuery({
       baseUrl: "http://127.0.0.1:8000",
       prepareHeaders: (headers) => {
-         const accessToken = getCookie("access-token");
+         const accessToken = getCookie("access_token");
 
          if (accessToken) {
             headers.set("Authorization", `Bearer ${accessToken}`);
@@ -38,11 +38,11 @@ const baseQueryWithAuth = async (args, api, extraOptions) => {
             setCookie("access_token", access);
             result = await baseQuery(args, api, extraOptions);
          } else {
-            api.dispatch(logoutUser()); // Use api.dispatch here
+            api.dispatch(logoutUser());
             window.location.href = "/authentication/login";
          }
       } else {
-         api.dispatch(logoutUser()); // Use api.dispatch here
+         api.dispatch(logoutUser());
          window.location.href = "/authentication/login";
       }
    }

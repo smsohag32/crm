@@ -8,10 +8,12 @@ import DealStage from "./DealStage";
 import ClientCard from "./ClientCard";
 import { clients, stages } from "@/data/data";
 import AddClient from "./AddClient";
+import { useGetAllDealsQuery } from "@/redux-store/api/dealsApi";
 const DealsContainer = () => {
    const [isAdd, setIsAdd] = useState(false)
    const [stageData, setStageData] = useState(stages);
-   const [activeCard, setActiveCard] = useState(null); // Track the currently dragged card
+   const [activeCard, setActiveCard] = useState(null);
+   const { data: dealsData } = useGetAllDealsQuery()
 
    const handleDragStart = (event) => {
       const { active } = event;
@@ -78,7 +80,7 @@ const DealsContainer = () => {
       <div>
          <div className="flex items-center flex-col lg:flex-row justify-between gap-6 w-full">
             <h2 className="flex items-center gap-2">
-               <span className="text-[20px] flex items-center gap-1">FBD : New Deals</span>
+               <span className="text-[20px] flex items-center gap-1">Deals...</span>
                <span className="bg-gray-200 flex items-center px-1 text-gray-700">
                   <DollarSign size={16} />1455,00
                </span>

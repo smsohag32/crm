@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 import { deleteCookie, getCookie, setCookie } from "@/utils/helper";
 import { loginApi } from "../api/loginApi";
-const getPersistedToken = getCookie("accessToken");
+const getPersistedToken = getCookie("access_token");
 const getPersistedUser = JSON.parse(getCookie("crm-user"));
 
 const initialState = {
@@ -32,7 +32,8 @@ const authSlice = createSlice({
       logoutUser: (state) => {
          state.token = null;
          state.user = null;
-         deleteCookie("accessToken");
+         deleteCookie("access_token");
+         deleteCookie("refresh_token");
          deleteCookie("crm-user");
       },
    },
@@ -44,12 +45,13 @@ const authSlice = createSlice({
          })
          .addCase(loginUser.fulfilled, (state, action) => {
             console.log("action", action?.payload);
-            const { token, dto } = action.payload.data;
+            const { tokens, ...user } = action.payload;
             state.isLoading = false;
-            state.token = token;
-            state.user = dto;
-            if (token) setCookie("accessToken", token);
-            if (dto) setCookie("crm-user", JSON.stringify(dto));
+            state.token = tokens?.access_token;
+            state.user = user;
+            if (tokens?.access_token) setCookie("access_token", tokens?.access_token);
+            if (tokens?.refresh_token) setCookie("refresh_token", tokens?.refresh_token);
+            if (user) setCookie("crm-user", JSON.stringify(user));
          })
          .addCase(loginUser.rejected, (state, action) => {
             state.isLoading = false;
