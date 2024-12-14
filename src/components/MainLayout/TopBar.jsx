@@ -8,6 +8,7 @@ import { Button } from "../ui/button";
 import { Sheet, SheetContent } from "../ui/sheet";
 import SearchInput from "../SearchBox/SearchInput";
 import logo from "@/assets/icons/logo.png"
+import ProfileMenu from "./ProfileMenu";
 const TopBar = () => {
    const [isOpen, setOpen] = useState(false);
    const isDesktop = useMediaQuery("(min-width: 1024px)");
@@ -57,11 +58,7 @@ const TopBar = () => {
                   <LayoutDashboard size={18} /> Dashboard
                </NavLink>
 
-               <div className="flex items-center cursor-pointer gap-2">
-                  <div className="ring-[1px] rounded-full ring-blue-800 shadow-sm ">
-                     <UserAvatar size="8px" className="w-8 h-8" name={"Sohag"} />
-                  </div>
-               </div>
+               <ProfileMenu />
             </div>
          ) : (
             <Sheet key={"left"} open={isOpen} onOpenChange={setOpen}>
@@ -97,13 +94,7 @@ const TopBar = () => {
                         <LayoutDashboard /> Dashboard
                      </NavLink>
 
-
-                     <div className="flex items-center px-3 mt-auto cursor-pointer gap-2">
-                        <div className="border rounded-full border-gray-200 ">
-                           <UserAvatar size="8px" className="w-8 h-8" name={"Sohag"} />
-                        </div>
-
-                     </div>
+                     <ProfileMenu />
                   </div>
                </SheetContent>
             </Sheet>

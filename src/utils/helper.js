@@ -32,3 +32,7 @@ export const formatName = (str) => {
       )
       .replace(/_/g, " ");
 };
+
+export const handleBack = () => {
+   window.history.back();
+};

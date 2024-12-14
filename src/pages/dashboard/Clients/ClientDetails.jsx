@@ -12,10 +12,12 @@ import { useParams } from 'react-router-dom'
 import Loading from '@/components/Loading/Loading'
 import CrmAlert from '@/components/ui/alert'
 import { useGetAllDealsQuery } from '@/redux-store/api/dealsApi'
+import EditClient from './EditClient'
 
 const ClientDetails = () => {
    const { id } = useParams()
-   const { data: client, isLoading } = useGetClientQuery(id)
+   const [isEdit, setIsEdit] = useState(false)
+   const { data: client, isLoading, refetch } = useGetClientQuery(id)
    const [isDelete, setIsDelete] = useState(false)
    const [deleteClient, { isLoading: deleteLOading }] = useDeleteClientMutation()
    const [deals, setDeals] = useState([
@@ -29,9 +31,6 @@ const ClientDetails = () => {
       toast.success("Copied to clipboard")
    }
 
-   const handleEdit = () => {
-      console.log("Edit client")
-   }
 
    const handleDelete = () => {
       setIsDelete(true)
@@ -55,10 +54,10 @@ const ClientDetails = () => {
          {isLoading ? <Loading /> :
 
             <Card className="overflow-hidden">
-               <CardHeader className="bg-gradient-to-r from-blue-600 to-blue-400 text-white">
+               <CardHeader className="bg-gradient-to-r from-slate-500 to-slate-500 text-white">
                   <div className="flex justify-between items-center">
                      <div className="flex items-center space-x-4">
-                        <Avatar className="h-20 w-20 border-2 border-white">
+                        <Avatar className="h-20 w-20 border-2 border-slate-400">
                            <AvatarImage src={`https://api.dicebear.com/6.x/initials/svg?seed=${client.name}`} />
                            <AvatarFallback>{client.name.charAt(0)}</AvatarFallback>
                         </Avatar>
@@ -68,7 +67,7 @@ const ClientDetails = () => {
                         </div>
                      </div>
                      <div className="flex gap-2">
-                        <Button variant="secondary" size="sm" onClick={handleEdit} className="bg-white text-blue-600 hover:bg-blue-50">
+                        <Button variant="secondary" size="sm" onClick={() => setIsEdit(true)} className="bg-white text-blue-600 hover:bg-blue-50">
                            <Pencil className="h-4 w-4 mr-2" />
                            Edit
                         </Button>
@@ -160,6 +159,7 @@ const ClientDetails = () => {
             handleClose={handleDeleteCancel}
             handleConfirm={handleDeleteConfirm}
          />
+         <EditClient refetch={refetch} isOpen={isEdit} setOpen={setIsEdit} clientDetails={client} />
       </div>
    )
 }

@@ -6,7 +6,7 @@ import { usePostUserMutation } from "@/redux-store/api/usersApi";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-const AddUser = ({ isOpen, setOpen }) => {
+const AddUser = ({ isOpen, setOpen, refetch }) => {
    const [postUser, { isLoading }] = usePostUserMutation()
    const {
       register,
@@ -29,6 +29,7 @@ const AddUser = ({ isOpen, setOpen }) => {
       try {
          await postUser(newUser).unwrap()
          handleClose()
+         refetch()
 
       } catch (err) {
          console.log(err)

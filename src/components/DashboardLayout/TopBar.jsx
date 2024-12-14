@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import UserAvatar from '../user-avatar/UserAvatar';
+import ProfileMenu from '../MainLayout/ProfileMenu';
 
 const FullscreenButton = () => {
    const [isFullscreen, setIsFullscreen] = useState(false);
@@ -68,10 +69,7 @@ export default function TopBar({ toggle, setToggle }) {
             <Link to={'/'} className='text-[20px] text-title uppercase opacity-75 font-medium'>Dashboard</Link>
          </div>
          <div className='text-[#1d1d1d] pe-1'>
-
-            <div className="ring-[1px] rounded-full ring-blue-800 shadow-sm ">
-               <UserAvatar size="8px" className="w-8 h-8" name={"Sohag"} />
-            </div>
+            <ProfileMenu />
          </div>
       </div>
    );

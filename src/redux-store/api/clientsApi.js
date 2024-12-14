@@ -29,6 +29,13 @@ const clientsApi = apiSlice.injectEndpoints({
          }),
          providesTags: ["clients"],
       }),
+      searchClient: builder.query({
+         query: ({ search }) => ({
+            url: "/api/clients/",
+            params: { search },
+         }),
+         providesTags: ["clients"],
+      }),
 
       // Mutation to add a new client
       postClient: builder.mutation({
@@ -37,21 +44,21 @@ const clientsApi = apiSlice.injectEndpoints({
             method: "POST",
             body: newClient,
          }),
-         providesTags: ["clients"],
+         invalidatesTags: ["clients"],
       }),
       deleteClient: builder.mutation({
          query: (id) => ({
             url: `/api/clients/${id}/`,
             method: "DELETE",
          }),
-         providesTags: ["clients"],
+         invalidatesTags: ["clients"],
       }),
       updateClient: builder.mutation({
-         query: (id) => ({
+         query: ({newData, id}) => ({
             url: `/api/clients/${id}/`,
             method: "PUT",
+            body: newData,
          }),
-         providesTags: ["clients"],
       }),
    }),
 });
@@ -64,5 +71,6 @@ export const {
    useUpdateClientMutation,
    useGetClientDealsQuery,
    usePostClientMutation,
+   useSearchClientQuery,
    useGetClientQuery,
 } = clientsApi;

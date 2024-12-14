@@ -4,17 +4,21 @@ import UserAvatar from "@/components/user-avatar/UserAvatar";
 import { BadgePlus, Pencil, Trash, UserCheck, UserPlus } from "lucide-react";
 import { useState } from "react";
 import AddUser from "./AddUser";
-import { useGetUsersQuery } from "@/redux-store/api/usersApi";
+import { useDeleteUserMutation, useGetUsersQuery } from "@/redux-store/api/usersApi";
 import { Badge } from "@/components/ui/badge";
 import SearchInput from "@/components/SearchBox/SearchInput";
+import CrmAlert from "@/components/ui/alert";
+import { toast } from "sonner";
 
 const UserManagement = () => {
    const [currentPage, setCurrentPage] = useState(1);
    const [itemsPerPage] = useState(3);
    const [isAdd, setIsAdd] = useState(false);
-   const { data: usersData = [], isLoading } = useGetUsersQuery();
+   const { data: usersData = [], isLoading, refetch } = useGetUsersQuery();
    const [searchText, setSearchText] = useState("");
-
+   const [isDeleteOpen, setIsDeleteOpen] = useState(false)
+   const [selectedUser, setSelectedUser] = useState("")
+   const [deleteUser, { isLoading: deleteLoading }] = useDeleteUserMutation()
    // Filter users based on search text
    const filteredUsers = usersData.filter((user) =>
       user.full_name?.toLowerCase().includes(searchText.toLowerCase()) ||
@@ -36,8 +40,33 @@ const UserManagement = () => {
 
    const handleSearch = (value) => {
       setSearchText(value);
-      setCurrentPage(1); // Reset to first page when searching
+      setCurrentPage(1);
    };
+
+
+   const handleDeleteClick = (id) => {
+      setSelectedUser(id)
+      setIsDeleteOpen(true)
+
+   }
+
+   const handleDeleteConfirm = async () => {
+      console.log(`Deleting client with ID: ${selectedUser}`);
+      await deleteUser(selectedUser).unwrap()
+      toast.success("User Deleted Successfully.")
+      refetch()
+      setIsDeleteOpen(false);
+      setSelectedUser(null);
+   };
+
+   const handleDeleteCancel = () => {
+      setIsDeleteOpen(false);
+      selectedUser("");
+   };
+
+
+
+
 
    return (
       <div>
@@ -124,6 +153,7 @@ const UserManagement = () => {
                                        Edit
                                     </Button>
                                     <Button
+                                       onClick={() => handleDeleteClick(user?.id)}
                                        variant="destructive"
                                        size="sm"
                                        className="bg-red-500 hover:bg-red-600"
@@ -150,7 +180,14 @@ const UserManagement = () => {
             />
          </div>
 
-         <AddUser isOpen={isAdd} setOpen={setIsAdd} />
+         <AddUser isOpen={isAdd} setOpen={setIsAdd} refetch={refetch} />
+         <CrmAlert
+            isOpen={isDeleteOpen}
+            message="Delete User"
+            description="Are you sure you want to delete this user? This action cannot be undone."
+            handleClose={handleDeleteCancel}
+            handleConfirm={handleDeleteConfirm}
+         />
       </div>
    );
 };
