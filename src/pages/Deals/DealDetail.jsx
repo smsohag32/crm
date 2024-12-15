@@ -10,13 +10,14 @@ import { handleBack } from '@/utils/helper';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import TaskList from './TaskList';
 import UserAvatar from '@/components/user-avatar/UserAvatar';
+import AddNote from './AddNote';
 
 const DealDetail = () => {
    const { id } = useParams();
-   const { data: dealDetails, isLoading } = useGetDealQuery(id);
+   const { data: dealDetails, isLoading, refetch } = useGetDealQuery(id);
    const [notes, setNotes] = useState([]);
    const [tasks, setTasks] = useState([]);
-
+   const [isNote, setIsNote] = useState(false)
 
    const handleDelete = () => {
 
@@ -27,7 +28,7 @@ const DealDetail = () => {
 
    return (
       <div className="main-container pt-1 pb-6 flex gap-6 items-start">
-         <div>
+         <div className='ps-2 hidden lg:block'>
             <Button onClick={handleBack} variant="outline" className="bg-white"><ArrowLeft /> Back</Button>
          </div>
          <div className='flex-1 space-y-6'>
@@ -44,14 +45,14 @@ const DealDetail = () => {
                </CardHeader>
                <CardContent className="grid grid-cols-1 items-start lg:grid-cols-2 gap-6" >
                   <div className='flex  gap-6'><div className='flex items-center gap-3'>
-                     <UserAvatar name={"Client"} className="bg-white w-14 h-14" />
+                     <UserAvatar name={"Client"} className="bg-slate-200 w-14 h-14" />
                      <div>
                         <p className='text-[20px] font-normal text-title'>Donald T</p>
                         <p className='text-sm text-des'>Client</p>
                      </div>
                   </div>
                      <div className='flex items-center gap-3'>
-                        <UserAvatar name={"Client"} className="bg-white w-14 h-14" />
+                        <UserAvatar name={"Client"} className="bg-slate-200 w-14 h-14" />
                         <div>
                            <p className='text-[20px] font-normal text-title'>Donald T</p>
                            <p className='text-sm text-des'>Client</p>
@@ -74,40 +75,40 @@ const DealDetail = () => {
 
 
             <div className='bg-white py-3 rounded-[8px] px-3 flex flex-col lg:flex-row gap-4'>
-               <Button className="w-full gap-2 text-title hover:bg-transparent hover:text-blue-800" variant="ghost"> <MessageSquarePlus size={16} /> Add Note</Button>
-               <Button className="w-full gap-2 text-title hover:bg-transparent hover:text-blue-800" variant="ghost"> <FileCheck size={16} /> Add Task</Button>
-               <Button className="w-full gap-2 text-title hover:bg-transparent hover:text-blue-800" variant="ghost"><SquareUserRound size={16} /> Add Contact</Button>
+               <Button onClick={() => setIsNote(true)} className="w-full gap-2 text-title hover:bg-transparent hover:text-blue-600" variant="ghost"> <MessageSquarePlus size={16} /> Add Note</Button>
+               <Button className="w-full gap-2 text-title hover:bg-transparent hover:text-blue-600" variant="ghost"> <FileCheck size={16} /> Add Task</Button>
+               <Button className="w-full gap-2 text-title hover:bg-transparent hover:text-blue-600" variant="ghost"><SquareUserRound size={16} /> Add Contact</Button>
             </div>
 
             <Tabs defaultValue="notes" className="w-full">
                <TabsList className="grid w-full bg-transparent  grid-cols-4 ">
                   <TabsTrigger
                      value="notes"
-                     className="flex items-center gap-2 py-5 text-black border-transparent hover:text-blue-800 hover:border-blue-800 data-[state=active]:text-blue-800 data-[state=active]:border-b-blue-800 data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:rounded-none"
+                     className="flex shadow-none items-center gap-2 py-5 text-black border-transparent hover:text-blue-600 hover:border-blue-600 data-[state=active]:text-blue-600 data-[state=active]:shadow-sm data-[state=active]:border-b-blue-600 data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:rounded-none"
                   >
                      <FileText className="h-4 w-4" />
                      Notes
                   </TabsTrigger>
                   <TabsTrigger
                      value="tasks"
-                     className="flex items-center gap-2 py-5 text-black border-transparent hover:text-blue-800 hover:border-blue-800 data-[state=active]:text-blue-800 data-[state=active]:border-b-blue-800 data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:rounded-none"
+                     className="flex shadow-none items-center gap-2 py-5 text-black border-transparent hover:text-blue-600 hover:border-blue-600 data-[state=active]:text-blue-600 data-[state=active]:shadow-sm data-[state=active]:border-b-blue-600 data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:rounded-none"
                   >
                      <CheckSquare className="h-4 w-4" />
                      Tasks
                   </TabsTrigger>
                   <TabsTrigger
                      value="contacts"
-                     className="flex items-center gap-2 py-5 text-black border-transparent hover:text-blue-800 hover:border-blue-800 data-[state=active]:text-blue-800 data-[state=active]:border-b-blue-800 data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:rounded-none"
+                     className="flex shadow-none items-center gap-2 py-5 text-black border-transparent hover:text-blue-600 hover:border-blue-600 data-[state=active]:text-blue-600 data-[state=active]:shadow-sm data-[state=active]:border-b-blue-600 data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:rounded-none"
                   >
                      <Users className="h-4 w-4" />
                      Contacts
                   </TabsTrigger>
                   <TabsTrigger
-                     value="document"
-                     className="flex items-center gap-2 py-5 text-black border-transparent hover:text-blue-800 hover:border-blue-800 data-[state=active]:text-blue-800 data-[state=active]:border-b-blue-800 data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:rounded-none"
+                     value="history"
+                     className="flex shadow-none items-center gap-2 py-5 text-black border-transparent hover:text-blue-600 hover:border-blue-600 data-[state=active]:text-blue-600 data-[state=active]:shadow-sm data-[state=active]:border-b-blue-600 data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:rounded-none"
                   >
                      <Users className="h-4 w-4" />
-                     Document
+                     Activity History
                   </TabsTrigger>
 
 
@@ -227,6 +228,8 @@ const DealDetail = () => {
                </TabsContent>
             </Tabs>
          </div>
+
+         <AddNote id={id} isOpen={isNote} setOpen={setIsNote} refetch={refetch} />
 
       </div>
    );

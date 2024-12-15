@@ -6,6 +6,14 @@ const userApi = apiSlice.injectEndpoints({
          query: () => ({
             url: `/api/users/user_list/`,
          }),
+         transformResponse: (res) => {
+            return res?.reverse();
+         },
+      }),
+      getProfile: builder.query({
+         query: () => ({
+            url: `/api/users/profile/`,
+         }),
       }),
       postUser: builder.mutation({
          query: (newUser) => ({
@@ -23,4 +31,5 @@ const userApi = apiSlice.injectEndpoints({
    }),
 });
 
-export const { usePostUserMutation, useGetUsersQuery, useDeleteUserMutation } = userApi;
+export const { usePostUserMutation, useGetUsersQuery, useDeleteUserMutation, useGetProfileQuery } =
+   userApi;

@@ -55,8 +55,7 @@ const SelectField = ({ id, label, options, register, setValue, errors }) => (
    </div>
 );
 
-// New Combobox component for member assignment
-const AssignMember = ({ users = [], selectedMembers, setSelectedMembers }) => {
+export const AssignMember = ({ users = [], selectedMembers, setSelectedMembers }) => {
    const [open, setOpen] = useState(false);
    const [searchValue, setSearchValue] = useState("");
 

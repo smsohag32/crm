@@ -41,6 +41,19 @@ export default function Sidebar({ toggle, setToggle }) {
          ,
       },
       {
+         to: "/dashboard/clients",
+         label: "Clients",
+         icon: <UserSquare />
+         ,
+      },
+
+      {
+         to: "/dashboard/user-management",
+         label: "User Management",
+
+         icon: <UserSearchIcon />
+         ,
+      }, {
          to: "/dashboard/teams",
          label: "Teams",
 
@@ -57,19 +70,7 @@ export default function Sidebar({ toggle, setToggle }) {
          icon: <Users />
          ,
       },
-      {
-         to: "/dashboard/user-management",
-         label: "User Management",
 
-         icon: <UserSearchIcon />
-         ,
-      },
-      {
-         to: "/dashboard/clients",
-         label: "Clients",
-         icon: <UserSquare />
-         ,
-      },
 
    ];
 

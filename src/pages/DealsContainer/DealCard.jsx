@@ -1,12 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import UserAvatar from "@/components/user-avatar/UserAvatar";
-import { EllipsisVertical } from 'lucide-react';
+import { Edit3, EllipsisVertical, Eye, Trash2 } from 'lucide-react';
 import { useNavigate } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import CrmAlert from "@/components/ui/alert";
+import { useDeleteDealMutation } from "@/redux-store/api/dealsApi";
+import { toast } from "sonner";
 
-const DealCard = ({ deal, isOverlay = false }) => {
+const DealCard = ({ deal, isOverlay = false, refetch }) => {
+   const [isOpen, setIsOpen] = useState(false)
+   const [deleteDeal, { isLoading: dealLoading }] = useDeleteDealMutation()
    const navigate = useNavigate()
    const {
       attributes,
@@ -27,10 +33,27 @@ const DealCard = ({ deal, isOverlay = false }) => {
       cursor: "grab",
    };
 
-   const handleMenu = (e) => {
-      e.stopPropagation();
-      console.log("Menu button clicked");
+
+
+   const handleDelete = () => {
+      setIsOpen(true)
    };
+
+
+   const handleDeleteConfirm = async (e) => {
+      e.stopPropagation();
+      try {
+         await deleteDeal(deal?.id).unwrap()
+         toast.success("Deal deleted successfully.")
+         refetch();
+      } catch (err) {
+         toast.error("Failed to delete deal. Try again.")
+      }
+   }
+
+   const handleClose = () => {
+      setIsOpen(false)
+   }
 
    return (
       <div
@@ -50,13 +73,49 @@ const DealCard = ({ deal, isOverlay = false }) => {
                </div>
             </div>
             <div className=" flex flex-col  items-end justify-end">
-               <button
-                  onClick={handleMenu}
-                  onPointerDown={(e) => e.stopPropagation()}
-                  className="hover:bg-gray-100 rounded-full p-1 transition-colors duration-200"
-               >
-                  <EllipsisVertical size={16} />
-               </button>
+               <DropdownMenu onPointerDown={(e) => e.stopPropagation()}>
+                  <DropdownMenuTrigger className="active:border-none outline-none">
+                     <button
+
+                        className="hover:bg-gray-100 rounded-full p-1 transition-colors duration-200"
+                     >
+                        <EllipsisVertical size={16} />
+                     </button>
+                  </DropdownMenuTrigger>
+
+                  <DropdownMenuContent>
+                     <DropdownMenuItem
+                        type="button"
+                        onPointerDown={(e) => e.stopPropagation()}
+                        className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 text-gray-700 rounded-md"
+                        onClick={() => navigate(`/deal/${deal?.id}`)}
+                     >
+                        <Eye size={16} className="text-blue-500" />
+                        <span>View</span>
+                     </DropdownMenuItem>
+                     <DropdownMenuItem
+                        type="button"
+                        onPointerDown={(e) => e.stopPropagation()}
+                        className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 text-gray-700 rounded-md"
+                        onClick={() => navigate(`/deal/${deal?.id}`)}
+                     >
+                        <Edit3 size={16} className="text-green-500" />
+                        <span>Edit</span>
+                     </DropdownMenuItem>
+                     <DropdownMenuItem
+                        type="button"
+                        onPointerDown={(e) => e.stopPropagation()}
+                        className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 text-gray-700 rounded-md"
+                        onClick={handleDelete}
+                     >
+                        <Trash2 size={16} className="text-red-500" />
+                        <span>Delete</span>
+                     </DropdownMenuItem>
+                  </DropdownMenuContent>
+
+               </DropdownMenu>
+
+
                <p className="text-des text-sm mt-1 font-medium">${deal.loan_amount}</p>
             </div>
          </div>
@@ -75,6 +134,15 @@ const DealCard = ({ deal, isOverlay = false }) => {
                {deal.deal_type}
             </Badge>
          </div>
+
+
+         <CrmAlert
+            isOpen={isOpen}
+            message="Delete Client"
+            description="Are you sure you want to delete this client? This action cannot be undone."
+            handleClose={handleClose}
+            handleConfirm={handleDeleteConfirm}
+         />
       </div>
    );
 };

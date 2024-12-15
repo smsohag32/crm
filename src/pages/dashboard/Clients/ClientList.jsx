@@ -15,6 +15,7 @@ import Loading from "@/components/Loading/Loading";
 import { useDeleteClientMutation, useGetAllClientsQuery, useLazyGetClientsByPageQuery } from "@/redux-store/api/clientsApi";
 import CrmAlert from "@/components/ui/alert";
 import { toast } from "sonner";
+import { SearchDropdown } from "@/components/dropdown/SearchDropdown";
 
 const ClientList = () => {
    const navigate = useNavigate()
@@ -24,11 +25,15 @@ const ClientList = () => {
    const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
    const [clientToDelete, setClientToDelete] = useState(null);
    // Pagination state to track next and previous URLs
+   const [searchValue, setSearchValue] = useState("")
+
+
+
    const [paginationUrls, setPaginationUrls] = useState({
       next: null,
       prev: null,
    });
-
+ 
    // Lazy query for paginated data fetching
    const [getClients, { isLoading: isFetching }] = useLazyGetClientsByPageQuery();
 
@@ -118,8 +123,14 @@ const ClientList = () => {
                <UserCheck className="text-des" /> Client List
             </h2>
             <div className="flex items-center gap-2">
-               <div className="w-full lg:max-w-sm">
-                  <SearchInput handleSearch={handleSearch} />
+               <div className="w-full">
+                  <SearchDropdown
+                     placeHolder={"Search deals..."}
+                     className="w-full"
+                     value={searchValue}
+                     setValue={setSearchValue}
+                     optionData={optionsData}
+                  />
                </div>
                <Button onClick={() => setIsAdd(true)} size="" className="flex items-center text-sm px-2.5 !py-1.5 gap-2">
                   <UserPlus size={16} /> Add New

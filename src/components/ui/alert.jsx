@@ -22,8 +22,8 @@ const CrmAlert = ({ isOpen, message, description, handleClose, handleConfirm }) 
                </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-               <AlertDialogCancel>Cancel</AlertDialogCancel>
-               <Button onClick={handleConfirm}>Continue</Button>
+               <AlertDialogCancel onPointerDown={(e) => e.stopPropagation()}>Cancel</AlertDialogCancel>
+               <Button onPointerDown={(e) => e.stopPropagation()} onClick={handleConfirm}>Continue</Button>
             </AlertDialogFooter>
          </AlertDialogContent>
       </AlertDialog>

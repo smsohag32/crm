@@ -107,7 +107,7 @@ const DealsContainer = () => {
                onDragOver={handleDragOver}
                onDragEnd={handleDragEnd}
             >
-               <div className="flex items-center flex-col lg:flex-row justify-between gap-6 w-full">
+               <div className="flex  items-center flex-col lg:flex-row justify-between gap-6 w-full">
                   <h2 className="flex items-center gap-2">
                      <span className="text-[20px] flex items-center gap-1">Deals</span>
                      <span className="bg-gray-200 flex items-center px-1 text-gray-700">
@@ -128,10 +128,11 @@ const DealsContainer = () => {
                   </div>
                </div>
 
-               <div className="flex border-s border-s-gray-300 w-full mt-3 flex-nowrap  overflow-x-auto h-[80vh]">
+               <div className="flex border-s border-s-gray-300 w-full mt-3 flex-nowrap    overflow-x-auto h-[80vh]">
                   <SortableContext items={stageData.map((stage) => `stage-${stage.name}`)} strategy={rectSortingStrategy}>
                      {stageData.map((stage) => (
                         <DealStage
+                           refetch={refetch}
                            key={stage.name}
                            stage={stage}
                            deals={dealData.filter((deal) => deal.deal_stage === stage.name)}
@@ -144,6 +145,7 @@ const DealsContainer = () => {
                   {activeItem && (
                      activeItem.startsWith("deal-") ? (
                         <DealCard
+                           refetch={refetch}
                            deal={dealData.find((deal) => `deal-${deal.id}` === activeItem)}
                            isOverlay={true}
                         />

@@ -28,18 +28,14 @@ const ProfileMenu = () => {
    };
 
    const handleProfileClick = () => {
-      navigate('/profile');
-   };
-
-   const handleSettingsClick = () => {
-      navigate('/settings');
+      navigate('/dashboard/profile');
    };
 
    return (
       <DropdownMenu>
          <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="relative border border-blue-800 h-8 w-8 rounded-full">
-               <UserAvatar name={formatName(user?.full_name)} />
+               <UserAvatar className="bg-blue-200 text-title" name={formatName(user?.full_name)} />
             </Button>
          </DropdownMenuTrigger>
          <DropdownMenuContent className="w-56  p-3" align="end" forceMount>

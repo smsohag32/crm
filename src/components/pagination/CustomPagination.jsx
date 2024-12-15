@@ -49,14 +49,14 @@ const CustomPagination = ({ currentPage, totalPages, onPageChange, totalData }) 
             >
                {page}
             </button>
-      )
+         )
       );
    };
 
    return (
       <div className="flex mt-auto text-sm items-center flex-wrap  justify-center lg:justify-between px-2">
          <div className="hidden lg:flex items-center gap-2">
-            <p><span className="text-des">Shown</span> <span>2</span> <span className="text-des">out of</span> {totalData}</p>
+            <p><span className="text-des">Shown</span> {totalData}</p>
          </div>
          <div className="flex justify-center gap-1.5 mt-4">
             <button

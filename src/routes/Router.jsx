@@ -13,6 +13,7 @@ import AuthRoute from "./AuthRoute";
 import ClientList from "@/pages/dashboard/Clients/ClientList";
 import ClientDetails from "@/pages/dashboard/Clients/ClientDetails";
 import DealDetail from "@/pages/Deals/DealDetail";
+import Profile from "@/pages/Profile/Profile";
 
 export const router = createBrowserRouter([
    {
@@ -52,6 +53,10 @@ export const router = createBrowserRouter([
          {
             path: "/dashboard",
             element: <Overview />
+         },
+         {
+            path: "/dashboard/profile",
+            element: <Profile />
          },
          {
             path: "/dashboard/teams",

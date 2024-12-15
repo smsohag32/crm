@@ -12,7 +12,7 @@ import { toast } from "sonner";
 
 const UserManagement = () => {
    const [currentPage, setCurrentPage] = useState(1);
-   const [itemsPerPage] = useState(3);
+   const [itemsPerPage] = useState(8);
    const [isAdd, setIsAdd] = useState(false);
    const { data: usersData = [], isLoading, refetch } = useGetUsersQuery();
    const [searchText, setSearchText] = useState("");
@@ -99,7 +99,7 @@ const UserManagement = () => {
                            <th className="px-6 py-2 text-start font-medium text-[#3b3d41]">Name</th>
                            <th className="px-6 py-2 text-start font-medium text-[#3b3d41]">Email</th>
                            <th className="px-6 py-2 text-start font-medium text-[#3b3d41]">User Type</th>
-                           <th className="px-6 py-2 text-start font-medium text-[#3b3d41]">Status</th>
+
                            <th className="px-6 py-2 text-center font-medium text-[#3b3d41]">Action</th>
                         </tr>
                      </thead>
@@ -128,20 +128,6 @@ const UserManagement = () => {
                                  <Badge className="whitespace-nowrap">{user?.user_type}</Badge>
                               </td>
 
-                              <td className="px-6 py-3 text-base font-medium text-[#6B6B6B] text-start">
-                                 <p
-                                    className={`whitespace-nowrap text-sm rounded-sm ${user.status === "Active"
-                                       ? " text-green-800"
-                                       : user.status === "Inactive"
-                                          ? " text-red-800"
-                                          : user.status === "Pending"
-                                             ? " text-yellow-800"
-                                             : " text-green-800"
-                                       }`}
-                                 >
-                                    Active
-                                 </p>
-                              </td>
                               <td className="px-6 py-3 text-center flex items-center justify-center">
                                  <div className="flex gap-2">
                                     <Button

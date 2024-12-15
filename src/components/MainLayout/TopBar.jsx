@@ -1,6 +1,6 @@
 import { Link, NavLink } from "react-router-dom"; // Import NavLink
 import { CircleDollarSign, SquareCheckBig, LayoutDashboard, AlignJustify, Contact } from "lucide-react";
-import UserAvatar from "../user-avatar/UserAvatar";
+
 import { useState } from "react";
 import { useMediaQuery } from "@/hooks/use-media-query";
 

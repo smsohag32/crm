@@ -4,11 +4,22 @@ import UserAvatar from "@/components/user-avatar/UserAvatar";
 import { BadgePlus, ClipboardCheck, Filter, Plus } from "lucide-react";
 import { useState } from "react";
 import AddTask from "./AddTask";
+import { SearchDropdown } from "@/components/dropdown/SearchDropdown";
 
 const TasksContainer = () => {
    const [isAdd, setIsAdd] = useState(false)
    const [currentPage, setCurrentPage] = useState(1);
    const [itemsPerPage] = useState(2);
+   const [searchValue, setSearchValue] = useState("");
+   const [selectedOption, setSelectedOption] = useState(null);
+   
+
+   const handleSelect = (value) => {
+      setSelectedOption(value);
+      console.log("Selected:", value);
+   };
+
+
    const [taskData, setTaskData] = useState([
       {
          id: 1,
@@ -75,6 +86,7 @@ const TasksContainer = () => {
    };
 
 
+   const optionsData = []
    return (
       <div>
          <div className="flex items-center flex-col lg:flex-row justify-between gap-6 w-full">
@@ -82,11 +94,16 @@ const TasksContainer = () => {
                <ClipboardCheck className="text-des" /> Tasks
             </h2>
             <div className="flex items-center gap-2">
-
-               <Button variant="outline" className="flex items-center text-sm px-2.5 gap-2">
-                  <Filter size={16} />Filters
-               </Button>
-               <Button size="sm" onClick={() => setIsAdd(true)} className="flex items-center text-sm px-2.5 !py-1.5 gap-2">
+               <div className="w-full">
+                  <SearchDropdown
+                     placeHolder={"Search deals..."}
+                     className="w-full"
+                     value={searchValue}
+                     setValue={setSearchValue}
+                     optionData={optionsData}
+                  />
+               </div>
+               <Button onClick={() => setIsAdd(true)} className="flex items-center text-sm px-2.5 !py-2.5 gap-2">
                   <BadgePlus size={16} /> Add New
                </Button>
             </div>

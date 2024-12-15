@@ -5,7 +5,7 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import DealCard from "./DealCard";
 
-const DealStage = ({ stage, deals }) => {
+const DealStage = ({ stage, deals, refetch }) => {
    const { setNodeRef: setDroppableRef } = useDroppable({ id: `stage-${stage.name}` });
    const {
       attributes,
@@ -29,7 +29,7 @@ const DealStage = ({ stage, deals }) => {
          style={style}
          {...attributes}
          {...listeners}
-         className="flex-shrink-0 w-[300px] h-[76vh] pb-6 bg-slate-300 overflow-y-auto custom-scrollbar border-e border-e-gray-100"
+         className="flex-shrink-0 w-[313px] h-[76vh] pb-6 bg-slate-300 overflow-y-auto custom-scrollbar border-e border-e-gray-100"
       >
          <div className="py-1 px-2 mb-2 !bg-slate-200 bg-opacity-5 shadow-sm flex items-center sticky top-0 z-10">
             <p className="text-base font-medium line-clamp-1 flex-1">{stage.name}</p>
@@ -42,7 +42,7 @@ const DealStage = ({ stage, deals }) => {
          <SortableContext items={deals?.map((deal) => `deal-${deal.id}`)} strategy={verticalListSortingStrategy}>
             <div className="px-1.5 grid gap-2">
                {deals?.map((deal) => (
-                  <DealCard key={deal.id} deal={deal} />
+                  <DealCard refetch={refetch} key={deal.id} deal={deal} />
                ))}
             </div>
          </SortableContext>
