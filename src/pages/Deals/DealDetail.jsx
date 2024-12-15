@@ -1,45 +1,92 @@
 import { useState } from 'react';
 import { useParams } from "react-router-dom";
-import { useGetDealQuery } from "@/redux-store/api/dealsApi";
+import { useDeleteDealMutation, useGetDealQuery } from "@/redux-store/api/dealsApi";
 import Loading from "@/components/Loading/Loading";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Building2, Users, FileText, CheckSquare, DollarSign, Briefcase, MapPin, ArrowLeft, MessageSquarePlus, FileCheck, SquareUserRound, Edit3, Trash2, Forward } from 'lucide-react';
+import { Building2, Users, FileText, CheckSquare, DollarSign, Briefcase, MapPin, ArrowLeft, MessageSquarePlus, FileCheck, SquareUserRound, Edit3, Trash2, Forward, BookLock, FileSymlink, Eye } from 'lucide-react';
 import { handleBack } from '@/utils/helper';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import TaskList from './TaskList';
 import UserAvatar from '@/components/user-avatar/UserAvatar';
 import AddNote from './AddNote';
+import DealNote from './DealNote';
+import { Badge } from '@/components/ui/badge';
+import moment from 'moment';
+import EditDeal from '../DealsContainer/EditDeal';
+import CrmAlert from '@/components/ui/alert';
+import { toast } from 'sonner';
+import {
+   Tooltip,
+   TooltipContent,
+   TooltipProvider,
+   TooltipTrigger,
+} from "@/components/ui/tooltip"
+
+
 
 const DealDetail = () => {
    const { id } = useParams();
    const { data: dealDetails, isLoading, refetch } = useGetDealQuery(id);
-   const [notes, setNotes] = useState([]);
+   const [isEdit, setIsEdit] = useState(false)
+   const notes = dealDetails?.note || []
    const [tasks, setTasks] = useState([]);
+   const [deleteDeal, { isLoading: deleteLoading }] = useDeleteDealMutation()
    const [isNote, setIsNote] = useState(false)
+   const [isOpen, setIsOpen] = useState(false)
 
-   const handleDelete = () => {
+   const handleDeleteConfirm = async () => {
 
+      try {
+         await deleteDeal(dealDetails?.id).unwrap()
+         toast.success("Deal deleted successfully.")
+         handleBack()
+         refetch();
+      } catch {
+         toast.error("Failed to delete deal. Try again.")
+      }
    }
 
+   const handleClose = () => {
+      setIsOpen(false)
+   }
 
    if (isLoading) return <Loading />;
 
    return (
-      <div className="main-container pt-1 pb-6 flex gap-6 items-start">
-         <div className='ps-2 hidden lg:block'>
+      <div className="  pt-1 pb-6 flex gap-6 items-start">
+         <div className='ps-7 hidden bg-slate-300 h-screen -ms-5  -mt-3 fixed  py-3    w-[150px] lg:block'>
             <Button onClick={handleBack} variant="outline" className="bg-white"><ArrowLeft /> Back</Button>
          </div>
-         <div className='flex-1 space-y-6'>
+         <div className='flex-1 space-y-6 lg:ps-[150px]'>
             <Card className=" rounded-b-none   ">
                <CardHeader className="w-full pt-4">
-                  <div className="flex items-center   justify-between  w-full">
+                  <div className="flex items-center flex-col lg:flex-row gap-3  justify-between  w-full">
                      <p className='text-[24px]  w-full font-normal text-title'>{dealDetails?.lender_name}</p>
-                     <div className='w-full flex items-center gap-4 justify-end'>
-                        <Button variant="outline" className="rounded-full h-10 !p-1 border border-green-600 text-green-600 w-10 "><Edit3 size={20} /></Button>
-                        <Button variant="outline" className="rounded-full h-10 !p-1 border border-green-600 text-green-600 w-10 "><Forward size={20} /></Button>
-                        <Button variant="outline" className="rounded-full h-10 !p-1 border border-green-600 text-green-600 w-10 "><Trash2 size={20} /></Button>
+                     <div className='w-full flex items-center gap-4 lg:justify-end'>
+
+                        <p className='text-xs font-medium  text-des lg: pe-5 hidden lg:block'>Created at : {moment(new Date()).format("LLLL")}</p>
+
+
+                        <TooltipProvider>
+                           <Tooltip>
+                              <TooltipTrigger> <Button onClick={() => setIsEdit(true)} variant="outline" className="rounded-full h-10 !p-1 border border-green-600 text-green-600 w-10 "><Edit3 size={20} /></Button></TooltipTrigger>
+                              <TooltipContent>
+                                 <p>Edit Deal</p>
+                              </TooltipContent>
+                           </Tooltip>
+                        </TooltipProvider>
+                        <TooltipProvider>
+                           <Tooltip>
+                              <TooltipTrigger> <Button onClick={() => setIsOpen(true)} variant="outline" className="rounded-full h-10 !p-1 border border-green-600 text-green-600 w-10 "><Trash2 size={20} /></Button></TooltipTrigger>
+                              <TooltipContent>
+                                 <p>Delete deal </p>
+                              </TooltipContent>
+                           </Tooltip>
+                        </TooltipProvider>
+
+
                      </div>
                   </div>
                </CardHeader>
@@ -69,7 +116,10 @@ const DealDetail = () => {
                </CardContent>
             </Card>
 
-            <ScrollArea className="h-[280px] p-4  bg-white rounded-b-[8px]">
+            <ScrollArea className="h-[280px]  relative bg-white rounded-b-[8px]">
+               <div className='flex items-center justify-center w-full'>
+                  <Badge className="bg-blue-800  opacity-70 gap-2 text-xs  transform px-6 py-1 z-20  rounded-full"><Eye size={12} /> View Task</Badge>
+               </div>
                <TaskList dealId={id} />
             </ScrollArea>
 
@@ -115,28 +165,38 @@ const DealDetail = () => {
                </TabsList>
 
                <TabsContent value="notes">
-                  <Card>
-                     <CardHeader className="flex flex-row items-center justify-between">
-                        <CardTitle>Notes</CardTitle>
+                  <div className=''>
+                     <CardHeader className="">
+                        <Tabs defaultValue='dealNote'>
+                           <TabsList className="bg-transparent gap-6">
+                              <TabsTrigger
+                                 value="dealNote"
+                                 className="flex shadow-none items-center gap-2 pb-4 pt-0 px-0 text-des border-transparent hover:text-gary-600 hover:border-gray-600 data-[state=active]:text-gray-600 data-[state=active]:shadow-sm data-[state=active]:border-b-gray-600 data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:rounded-none"
+                              >
+
+                                 <FileSymlink size={16} />   Deal Note
+                              </TabsTrigger>
+                              <TabsTrigger
+                                 value="privateNote"
+                                 className="flex shadow-none items-center gap-2 pb-4 pt-0 px-0 text-des border-transparent hover:text-gary-600 hover:border-gray-600 data-[state=active]:text-gray-600 data-[state=active]:shadow-sm data-[state=active]:border-b-gray-600 data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:rounded-none"
+                              >
+
+                                 <BookLock size={16} />  Private Note
+                              </TabsTrigger>
+                           </TabsList>
+                           <TabsContent value="dealNote">
+                              <DealNote dealId={id} notes={notes} refetch={refetch} />
+                           </TabsContent>
+                           <TabsContent value="privateNote">
+                              <DealNote notes={notes} />
+                           </TabsContent>
+                        </Tabs>
+
 
                      </CardHeader>
                      <CardContent className="space-y-4">
-                        {notes.length === 0 ? (
-                           <p className="text-muted-foreground text-center py-4">No notes yet</p>
-                        ) : (
-                           notes.map(note => (
-                              <Card key={note.id}>
-                                 <CardContent className="p-4">
-                                    <p>{note.content}</p>
-                                    <p className="text-sm text-muted-foreground mt-2">
-                                       {new Date(note.date).toLocaleDateString()}
-                                    </p>
-                                 </CardContent>
-                              </Card>
-                           ))
-                        )}
                      </CardContent>
-                  </Card>
+                  </div>
                </TabsContent>
 
                <TabsContent value="tasks">
@@ -230,7 +290,14 @@ const DealDetail = () => {
          </div>
 
          <AddNote id={id} isOpen={isNote} setOpen={setIsNote} refetch={refetch} />
-
+         <EditDeal refetch={refetch} isOpen={isEdit} setOpen={setIsEdit} dealDetails={dealDetails} />
+         <CrmAlert
+            isOpen={isOpen}
+            message="Delete Client"
+            description="Are you sure you want to delete this client? This action cannot be undone."
+            handleClose={handleClose}
+            handleConfirm={handleDeleteConfirm}
+         />
       </div>
    );
 };

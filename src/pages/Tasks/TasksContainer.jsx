@@ -12,7 +12,7 @@ const TasksContainer = () => {
    const [itemsPerPage] = useState(2);
    const [searchValue, setSearchValue] = useState("");
    const [selectedOption, setSelectedOption] = useState(null);
-   
+
 
    const handleSelect = (value) => {
       setSelectedOption(value);

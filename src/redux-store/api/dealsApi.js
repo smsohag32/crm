@@ -22,6 +22,14 @@ const dealsApi = apiSlice.injectEndpoints({
          }),
          invalidatesTags: ["deals"],
       }),
+      editDeal: builder.mutation({
+         query: ({ id, editValue }) => ({
+            url: `/api/deal/update/${id}/`,
+            method: "PATCH",
+            body: editValue,
+         }),
+         invalidatesTags: ["deals"],
+      }),
       dealAssign: builder.mutation({
          query: (newAssign) => ({
             url: `/api/deal/deal-assign/create/`,
@@ -54,8 +62,8 @@ const dealsApi = apiSlice.injectEndpoints({
          invalidatesTags: ["deals"],
       }),
       postPrivateNote: builder.mutation({
-         query: ({ id, data }) => ({
-            url: `/api/deal/${id}/note/create/`,
+         query: ({ id, userId, data }) => ({
+            url: `/api/deal/1/deal-assign/${id}/user/${userId}/note/create/`,
             method: "POST",
             body: data,
          }),
@@ -66,6 +74,7 @@ const dealsApi = apiSlice.injectEndpoints({
 
 export const {
    useGetDealQuery,
+   useEditDealMutation,
    usePostPrivateNoteMutation,
    usePostDealNoteMutation,
    useGetAllDealsQuery,

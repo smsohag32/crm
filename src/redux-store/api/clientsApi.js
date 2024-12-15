@@ -54,7 +54,7 @@ const clientsApi = apiSlice.injectEndpoints({
          invalidatesTags: ["clients"],
       }),
       updateClient: builder.mutation({
-         query: ({newData, id}) => ({
+         query: ({ newData, id }) => ({
             url: `/api/clients/${id}/`,
             method: "PUT",
             body: newData,

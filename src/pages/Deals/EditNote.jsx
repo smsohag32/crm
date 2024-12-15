@@ -1,17 +1,27 @@
 import CmModal from '@/components/modal/CmModal';
 import { Textarea } from '@/components/ui/textarea';
 import { useForm } from 'react-hook-form';
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FileText } from 'lucide-react';
-import { useState } from 'react';
-import { usePostDealNoteMutation, usePostPrivateNoteMutation } from '@/redux-store/api/dealsApi';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
+import { useEditDealNoteMutation } from '@/redux-store/api/noteApi';
 
-const AddNote = ({ isOpen, setOpen, refetch, id }) => {
-   const { register, handleSubmit, formState: { errors }, reset } = useForm();
+const EditNote = ({ isOpen, note, setOpen, refetch, id }) => {
+   const [editDealNote, { isLoading }] = useEditDealNoteMutation()
    const [noteType, setNoteType] = useState("deal")
-   const [postDealNote, { isLoading }] = usePostDealNoteMutation()
-   const [postPrivateNote, { isLoading: privateLoading }] = usePostPrivateNoteMutation()
+
+   const { register, handleSubmit, formState: { errors }, reset } = useForm({
+      defaultValues: {
+         note: note?.note
+      }
+   });
+
+
+   useEffect(() => {
+      reset({
+         note: note?.note
+      })
+   }, [reset, note])
 
 
    const handleClose = () => {
@@ -20,33 +30,20 @@ const AddNote = ({ isOpen, setOpen, refetch, id }) => {
    };
 
    const onSubmit = async (data) => {
-      const noteData = { ...data, type: noteType };
-
-
       try {
-
-
-         await postDealNote({ id, data }).unwrap()
-         toast.success("Added new Note successfully.")
+         await editDealNote({ dealId: id, noteId: note?.id, data }).unwrap()
+         toast.success("Successfully edit your note.")
          refetch();
          setOpen(false);
          reset()
       } catch {
-         toast.error("Failed to add note. ")
+         toast.error("Failed to edit note. ")
       }
 
    };
 
    return (
-      <CmModal isOpen={isOpen} handleClose={handleClose} size={"600px"} title={"Add Note"}>
-         {/* Tabs for switching between Deal Note and Private Note */}
-         <Tabs defaultValue="deal" className="mb-4" onValueChange={setNoteType}>
-            <TabsList className="grid grid-cols-2 w-full">
-               <TabsTrigger value="deal" className="text-sm">Deal Note</TabsTrigger>
-               <TabsTrigger value="private" className="text-sm">Private Note</TabsTrigger>
-            </TabsList>
-         </Tabs>
-
+      <CmModal isOpen={isOpen} handleClose={handleClose} size={"600px"} title={"Edit Note"}>
          <form onSubmit={handleSubmit(onSubmit)}>
             <div className="space-y-4">
                <label className="flex items-center gap-2 text-sm text-gray-700">
@@ -54,6 +51,7 @@ const AddNote = ({ isOpen, setOpen, refetch, id }) => {
                   {noteType === "deal" ? "Deal Note" : "Private Note"}
                </label>
                <Textarea
+                  defaultValues={note?.note}
                   {...register("note", { required: "Note is required" })}
                   placeholder={`Enter your ${noteType === "deal" ? "deal" : "private"} note here`}
                   className="resize-none  bg-[#ffffff]"
@@ -74,7 +72,7 @@ const AddNote = ({ isOpen, setOpen, refetch, id }) => {
                   disabled={isLoading}
                   className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
                >
-                  Add Note
+                  Edit Note
                </button>
             </div>
          </form>
@@ -82,4 +80,4 @@ const AddNote = ({ isOpen, setOpen, refetch, id }) => {
    );
 };
 
-export default AddNote;
+export default EditNote;

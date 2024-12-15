@@ -16,7 +16,7 @@ const TopBar = () => {
    const activeClass = 'text-[#0e51e0]';
 
    return (
-      <div className="w-full flex px-5 lg:px-6 py-3 items-center border-b border-b-gray-200 bg-white gap-4 justify-between">
+      <div className="w-full fixed top-0 left-0 right-0  z-50 flex px-5 lg:px-6 h-[65px] items-center border-b border-b-gray-200 bg-white gap-4 justify-between">
          <div className="lg:w-full flex-1 lg:flex-auto flex items-center justify-between gap-14 ">
             <div>
                <Link to={"/"} className="flex items-center text-[20px] font-medium gap-2">

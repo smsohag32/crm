@@ -15,7 +15,7 @@ const DashboardLayout = ({ children }) => {
             />
          </div>
          <div
-            className={` w-full duration-500  transition-all transform  ${toggle ? "lg:pl-0 pl-[300px]" : "lg:pl-[300px] pl:0"
+            className={` w-full duration-500  transition-all transform  ${toggle ? "lg:pl-0 pl-[280px]" : "lg:pl-[280px] pl:0"
                }`}>
             <div className="w-full sticky top-0 left-0 right-0">
                <TopBar

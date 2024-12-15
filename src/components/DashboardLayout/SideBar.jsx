@@ -79,7 +79,7 @@ export default function Sidebar({ toggle, setToggle }) {
 
 
    return (
-      <div className='w-[300px]  pb-6 pt-4  bg-white  flex flex-col h-screen border-e overflow-hidden    '>
+      <div className='w-[280px]  pb-6 pt-4  bg-white  flex flex-col h-screen border-e overflow-hidden    '>
          <div className='px-5  '>
             <Link to={"/"} className="flex items-center text-[20px]  text-des font-medium gap-2">
                <img className="w-8 grayscale-1" src={logo} alt="crm" />  CRM

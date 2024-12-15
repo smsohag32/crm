@@ -7,8 +7,9 @@ import { User2, ChevronRight, ChevronLeft } from 'lucide-react';
 import { Progress } from "@/components/ui/progress";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import SpouseSet from "./SpouseSet";
-import { usePostClientMutation } from "@/redux-store/api/clientsApi";
+import { usePostClientMutation, useSearchClientQuery } from "@/redux-store/api/clientsApi";
 import { toast } from "sonner";
+import { SearchDropdown } from "@/components/dropdown/SearchDropdown";
 
 // Reusable Input Field Component
 const InputField = ({ id, label, type, placeholder, register, validationRules, errors }) => (
@@ -48,6 +49,13 @@ const AddClient = ({ isOpen, setOpen, refetch }) => {
    const [selectedSpouse, setSelectedSpouse] = useState("");
    const [postClient, { isLoading }] = usePostClientMutation();
    const [step, setStep] = useState(1);
+   const [searchValue, setSearchValue] = useState("")
+
+   const { data: searchClient, isLoading: clientLoading } = useSearchClientQuery({
+      search: searchValue,
+   });
+
+
    const totalSteps = 4;
 
    const {
@@ -81,7 +89,7 @@ const AddClient = ({ isOpen, setOpen, refetch }) => {
                // For each field, set the error on the corresponding field
                setError(key, {
                   type: "server", // Set error type as server
-                  message: serverErrors[key].join(", "), // Assuming the error is an array of messages
+                  message: serverErrors[key].join(", "),
                });
             });
          } else {
@@ -95,6 +103,13 @@ const AddClient = ({ isOpen, setOpen, refetch }) => {
       setStep(1);
       reset();
    };
+
+   const optionsData = searchClient?.results?.map(item => ({
+      label: item.name,
+      value: item.name,
+   })) || [];
+
+
 
    const nextStep = () => setStep((prev) => Math.min(prev + 1, totalSteps));
    const prevStep = () => setStep((prev) => Math.max(prev - 1, 1));
@@ -151,6 +166,18 @@ const AddClient = ({ isOpen, setOpen, refetch }) => {
             return (
                <>
                   <div className="space-y-4">
+                     <div className="space-y-2">
+                        <label htmlFor="spouse" className="text-base font-medium text-title">Spouse</label>
+                        <div className="w-full">
+                           <SearchDropdown
+                              placeholder={"Search client..."}
+                              className="w-full"
+                              value={searchValue}
+                              setValue={setSearchValue}
+                              optionData={optionsData}
+                           />
+                        </div>
+                     </div>
                      {/* Step 2: Address and Relationship Status */}
                      <InputField
                         id="address"
@@ -196,10 +223,7 @@ const AddClient = ({ isOpen, setOpen, refetch }) => {
                      />
 
                      {/* Spouse Selection */}
-                     <div className="space-y-2">
-                        <label htmlFor="spouse" className="text-base font-medium text-title">Spouse</label>
-                        <SpouseSet setSelectedSpouse={setSelectedSpouse} selectedSpouse={selectedSpouse} />
-                     </div>
+
                   </div>
                </>
             );

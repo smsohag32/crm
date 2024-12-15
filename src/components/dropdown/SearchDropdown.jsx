@@ -1,72 +1,73 @@
-import { useState } from "react";
-import Select from "react-select";
-import { components } from "react-select";
+import React, { useState, useRef } from "react";
+import { ScrollArea } from "../ui/scroll-area";
 
-const NoOptionsMessage = (props) => {
-   const inputLength = props.selectProps.inputValue.length;
-   const message =
-      inputLength > 0 && inputLength < 2 ? `Please type ${2 - inputLength} more character(s)` : "Not found.";
-   return (
-      <components.NoOptionsMessage {...props}>
-         <div>{message}</div>
-      </components.NoOptionsMessage>
-   );
-};
+export const SearchDropdown = ({ optionData, placeholder, value, setValue, searchValue, setSearchValue }) => {
+   const [isOpen, setIsOpen] = useState(false);
+   const dropdownRef = useRef(null);
 
-const customStyles = {
-   control: (styles) => ({
-      ...styles,
-      border: "1px s",
-      boxShadow: "none",
-      width: "100%",
-   }),
-   input: (styles) => ({
-      ...styles,
-      border: "none",
-      textAlign: "center",
-   }),
-   indicatorSeparator: (styles) => ({
-      display: "none",
-   }),
-   valueContainer: (styles) => ({
-      ...styles,
-   }),
-   dropdownIndicator: (styles) => ({
-      ...styles,
-   }),
-};
-
-export const SearchDropdown = ({ optionData, placeHolder, value, setValue }) => {
-   const [inputValue, setInputValue] = useState("");
-
-   const handleChange = (selectedOption) => {
+   // Handle option selection
+   const handleSelect = (selectedOption) => {
       setValue(selectedOption);
+      setIsOpen(false);
+      setSearchValue("");
    };
 
+   const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+         setIsOpen(false);
+      }
+   };
 
+   React.useEffect(() => {
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+         document.removeEventListener("mousedown", handleClickOutside);
+      };
+   }, []);
+
+   // Filter options based on search value
    const filteredOptions =
-      inputValue.length >= 2
-         ? optionData.filter((option) => option.label.toLowerCase().includes(inputValue.toLowerCase()))
+      searchValue?.length >= 2
+         ? optionData.filter((option) =>
+            option.label.toLowerCase().includes(searchValue.toLowerCase())
+         )
          : optionData;
 
    return (
-      <div>
-         <Select
-            placeholder={placeHolder}
-            className="border w-[250px] border-gray-300 rounded-md primary-shadow !hover:border-1 border-opacity-70 hover:border-blue-800"
-            classNamePrefix=""
-            value={value}
-            onChange={handleChange}
-            onInputChange={(input) => setInputValue(input)}
-
-            isSearchable={true}
-            formatCreateLabel={(inputValue) => `${inputValue}`}
-            styles={customStyles}
-            components={{ NoOptionsMessage }}
-            inputValue={inputValue}
-            noOptionsMessage={() => NoOptionsMessage({ selectProps: { inputValue } })}
-            options={filteredOptions}
+      <div ref={dropdownRef} className="relative w-64">
+         {/* Input Box */}
+         <input
+            type="text"
+            value={searchValue}
+            placeholder={placeholder}
+            onClick={() => setIsOpen((prev) => !prev)}
+            onChange={(e) => setSearchValue(e.target.value)}
+            className="w-full px-3 py-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-300 focus:outline-none"
          />
+
+         {/* Dropdown Options */}
+         {isOpen && (
+            <div className="absolute z-[999999] w-full bg-white h-[200px] border rounded-md shadow-md   mt-1">
+               {/* Display message if no options */}
+               <ScrollArea className="h-[200px] ">
+                  {filteredOptions?.length === 0 ? (
+                     <div className="px-3 py-2 text-gray-500">
+                        Not found
+                     </div>
+                  ) : (
+                     filteredOptions?.map((option) => (
+                        <div
+                           key={option.value}
+                           onClick={() => handleSelect(option)}
+                           className="px-3 py-2 hover:bg-blue-100 cursor-pointer"
+                        >
+                           {option.label}
+                        </div>
+                     ))
+                  )}
+               </ScrollArea>
+            </div>
+         )}
       </div>
    );
 };

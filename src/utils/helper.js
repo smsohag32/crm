@@ -26,7 +26,7 @@ export const deleteCookie = (name) => {
 
 export const formatName = (str) => {
    return str
-      .replace(
+      ?.replace(
          /([A-Z]+|[a-z]+(?:[-_][a-zA-Z]+)*)/g,
          (match) => match.charAt(0).toUpperCase() + match.slice(1).toLowerCase()
       )

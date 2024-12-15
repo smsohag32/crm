@@ -8,12 +8,19 @@ import { useForm } from "react-hook-form";
 import { User2, Phone, Mail, Home, DollarSign, PieChart, ChevronRight, ChevronLeft } from 'lucide-react';
 import { Progress } from "@/components/ui/progress";
 import CustomDropdown from "@/components/dropdown/CustomDropdown";
+import { useSearchClientQuery } from "@/redux-store/api/clientsApi";
+import { SearchDropdown } from "@/components/dropdown/SearchDropdown";
 
 const AddClient = ({ isOpen, setOpen, refetch }) => {
    const [selectedSpouse, setSelectedSpouse] = useState("")
    const [spouseData, setSpouseData] = useState([])
    const [step, setStep] = useState(1);
    const totalSteps = 4;
+   const [searchValue, setSearchValue] = useState("")
+
+   const { data: searchClient, isLoading: clientLoading } = useSearchClientQuery({
+      search: searchValue,
+   });
 
    const {
       register,
@@ -37,6 +44,15 @@ const AddClient = ({ isOpen, setOpen, refetch }) => {
 
    const nextStep = () => setStep((prev) => Math.min(prev + 1, totalSteps));
    const prevStep = () => setStep((prev) => Math.max(prev - 1, 1));
+
+
+   const optionsData = searchClient?.results?.map(item => ({
+      label: item.name,
+      value: item.name,
+   })) || [];
+
+
+
 
    const renderStep = () => {
       switch (step) {
@@ -126,12 +142,15 @@ const AddClient = ({ isOpen, setOpen, refetch }) => {
 
                      <div className="space-y-2">
                         <p className="text-base font-medium text-title">Spouse</p>
-                        <CustomDropdown
-                           title={"Select"}
-                           options={spouseData}
-                           selectedValue={selectedSpouse}
-                           onSelect={setSelectedSpouse}
-                        />
+                        <div className="w-full">
+                           <SearchDropdown
+                              placeHolder={"Search client..."}
+                              className="w-full"
+                              value={searchValue}
+                              setValue={setSearchValue}
+                              optionData={optionsData}
+                           />
+                        </div>
                      </div>
                      <div className="space-y-2">
                         <p className="text-base font-medium text-title">Employment Status</p>

@@ -7,12 +7,12 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Copy, Pencil, Trash, Phone, Mail, MapPin, Briefcase, CreditCard, Calendar } from 'lucide-react'
 import { toast } from 'sonner'
-import { useDeleteClientMutation, useGetClientQuery } from '@/redux-store/api/clientsApi'
+import { useDeleteClientMutation, useGetClientDealsQuery, useGetClientQuery } from '@/redux-store/api/clientsApi'
 import { useParams } from 'react-router-dom'
 import Loading from '@/components/Loading/Loading'
 import CrmAlert from '@/components/ui/alert'
-import { useGetAllDealsQuery } from '@/redux-store/api/dealsApi'
 import EditClient from './EditClient'
+import Empty from '@/components/Empty/Empty'
 
 const ClientDetails = () => {
    const { id } = useParams()
@@ -20,11 +20,7 @@ const ClientDetails = () => {
    const { data: client, isLoading, refetch } = useGetClientQuery(id)
    const [isDelete, setIsDelete] = useState(false)
    const [deleteClient, { isLoading: deleteLOading }] = useDeleteClientMutation()
-   const [deals, setDeals] = useState([
-      { id: 1, title: 'Initial Consultation', amount: 500, status: 'completed' },
-      { id: 2, title: 'Financial Planning', amount: 1000, status: 'in-progress' },
-   ])
-   const { data: dealsData } = useGetAllDealsQuery(id)
+   const { data: deals, isLoading: dealLoading } = useGetClientDealsQuery(id)
 
    const copyToClipboard = (text) => {
       navigator.clipboard.writeText(text)
@@ -54,16 +50,16 @@ const ClientDetails = () => {
          {isLoading ? <Loading /> :
 
             <Card className="overflow-hidden">
-               <CardHeader className="bg-gradient-to-r from-slate-500 to-slate-500 text-white">
+               <CardHeader className="bg-gradient-to-r from-slate-700 to-slate-700 text-white">
                   <div className="flex justify-between items-center">
                      <div className="flex items-center space-x-4">
                         <Avatar className="h-20 w-20 border-2 border-slate-400">
-                           <AvatarImage src={`https://api.dicebear.com/6.x/initials/svg?seed=${client.name}`} />
-                           <AvatarFallback>{client.name.charAt(0)}</AvatarFallback>
+                           <AvatarImage src={`https://api.dicebear.com/6.x/initials/svg?seed=${client?.name}`} />
+                           <AvatarFallback>{client?.name.charAt(0)}</AvatarFallback>
                         </Avatar>
                         <div>
-                           <CardTitle className="text-3xl font-bold">{client.name}</CardTitle>
-                           <CardDescription className="text-blue-100">Client ID: {client.id}</CardDescription>
+                           <CardTitle className="text-3xl font-bold">{client?.name}</CardTitle>
+                           <CardDescription className="text-blue-100">Client ID: {client?.id}</CardDescription>
                         </div>
                      </div>
                      <div className="flex gap-2">
@@ -90,62 +86,66 @@ const ClientDetails = () => {
                               <h3 className="text-lg font-semibold">Contact Information</h3>
                               <div className="flex items-center space-x-2">
                                  <Phone className="h-5 w-5 text-gray-500" />
-                                 <span>{client.contact_number}</span>
+                                 <span>{client?.contact_number}</span>
                               </div>
                               <div className="flex items-center space-x-2">
                                  <Mail className="h-5 w-5 text-gray-500" />
-                                 <span>{client.email}</span>
-                                 <Button variant="ghost" size="sm" onClick={() => copyToClipboard(client.email)}>
+                                 <span>{client?.email}</span>
+                                 <Button variant="ghost" size="sm" onClick={() => copyToClipboard(client?.email)}>
                                     <Copy className="h-4 w-4" />
                                  </Button>
                               </div>
                               <div className="flex items-start space-x-2">
                                  <MapPin className="h-5 w-5 text-gray-500 mt-1" />
-                                 <span>{client.address}</span>
+                                 <span>{client?.address}</span>
                               </div>
                            </div>
                            <div className="space-y-4">
                               <h3 className="text-lg font-semibold">Additional Details</h3>
                               <div className="flex items-center space-x-2">
-                                 <Badge variant="outline">{client.relationship_status}</Badge>
-                                 <Badge variant="outline">{client.employment_status}</Badge>
+                                 <Badge variant="outline">{client?.relationship_status}</Badge>
+                                 <Badge variant="outline">{client?.employment_status}</Badge>
                               </div>
                               <div className="flex items-center space-x-2">
                                  <Briefcase className="h-5 w-5 text-gray-500" />
-                                 <span>Income: ${client.income}</span>
+                                 <span>Income: ${client?.income}</span>
                               </div>
                               <div className="flex items-center space-x-2">
                                  <CreditCard className="h-5 w-5 text-gray-500" />
-                                 <span>Credit Score: {client.credit_score}</span>
+                                 <span>Credit Score: {client?.credit_score}</span>
                               </div>
                               <div className="flex items-center space-x-2">
                                  <Calendar className="h-5 w-5 text-gray-500" />
-                                 <span>Client Since: {client.created_at}</span>
+                                 <span>Client Since: {client?.created_at}</span>
                               </div>
                            </div>
                         </div>
                      </TabsContent>
                      <TabsContent value="deals">
-                        <div className="space-y-4">
-                           {deals.map(deal => (
-                              <Card key={deal.id}>
-                                 <CardContent className="flex items-center justify-between p-4">
-                                    <div>
-                                       <h4 className="font-semibold">{deal.title}</h4>
-                                       <p className="text-sm text-gray-500">${deal.amount}</p>
-                                    </div>
-                                    <div className="flex items-center space-x-2">
-                                       <Badge variant={deal.status === 'completed' ? 'success' : 'secondary'}>
-                                          {deal.status}
-                                       </Badge>
-                                       <Button variant="ghost" size="sm">
-                                          <Pencil className="h-4 w-4" />
-                                       </Button>
-                                    </div>
-                                 </CardContent>
-                              </Card>
-                           ))}
-                        </div>
+
+                        {deals && deals?.length > 0 ?
+
+                           <div className="space-y-4">
+
+                              {deals?.map(deal => (
+                                 <Card key={deal?.id}>
+                                    <CardContent className="flex items-center justify-between p-4">
+                                       <div>
+                                          <h4 className="font-semibold">{deal?.lender_name}</h4>
+                                          <p className="text-sm text-gray-500">${deal?.amount}</p>
+                                       </div>
+                                       <div className="flex items-center space-x-2">
+                                          <Badge variant="primary">
+                                             {deal?.deal_stage}
+                                          </Badge>
+                                       </div>
+                                    </CardContent>
+                                 </Card>
+                              ))}
+                           </div> : <Empty message={"No Data"} />
+
+                        }
+
                      </TabsContent>
                   </Tabs>
                </CardContent>

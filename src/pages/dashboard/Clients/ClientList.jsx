@@ -12,7 +12,7 @@ import {
    DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Loading from "@/components/Loading/Loading";
-import { useDeleteClientMutation, useGetAllClientsQuery, useLazyGetClientsByPageQuery } from "@/redux-store/api/clientsApi";
+import { useDeleteClientMutation, useGetAllClientsQuery, useLazyGetClientsByPageQuery, useSearchClientQuery } from "@/redux-store/api/clientsApi";
 import CrmAlert from "@/components/ui/alert";
 import { toast } from "sonner";
 import { SearchDropdown } from "@/components/dropdown/SearchDropdown";
@@ -27,13 +27,15 @@ const ClientList = () => {
    // Pagination state to track next and previous URLs
    const [searchValue, setSearchValue] = useState("")
 
-
+   const { data: searchClient, isLoading: clientLoading } = useSearchClientQuery({
+      search: searchValue,
+   });
 
    const [paginationUrls, setPaginationUrls] = useState({
       next: null,
       prev: null,
    });
- 
+
    // Lazy query for paginated data fetching
    const [getClients, { isLoading: isFetching }] = useLazyGetClientsByPageQuery();
 
@@ -115,6 +117,12 @@ const ClientList = () => {
 
 
 
+   const optionsData = searchClient?.results?.map(item => ({
+      label: item.name,
+      value: item.name,
+   })) || [];
+
+
    return (
       <div>
          {/* Header Section */}
@@ -125,7 +133,7 @@ const ClientList = () => {
             <div className="flex items-center gap-2">
                <div className="w-full">
                   <SearchDropdown
-                     placeHolder={"Search deals..."}
+                     placeHolder={"Search client..."}
                      className="w-full"
                      value={searchValue}
                      setValue={setSearchValue}

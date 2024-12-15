@@ -8,7 +8,7 @@ const MainLayout = ({ children }) => {
    return (
       <div className="w-full relative overflow-hidden ">
          <TopBar />
-         <div className="min-h-[80vh] px-5 pt-2">{children}</div>
+         <div className="min-h-[80vh]  px-5 pt-[73px]">{children}</div>
       </div>
    );
 };

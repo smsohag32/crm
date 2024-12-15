@@ -31,7 +31,7 @@ const CmModal = ({ isOpen, handleClose, title, size, children }) => {
                <DrawerHeader className={"border-b"}>
                   <DrawerTitle className=" pt-4 pb-4">{title}</DrawerTitle>
                </DrawerHeader>
-               <div className="  w-full  pt-6 pb-6 max-h-[85vh] overflow-y-auto">
+               <div className="  w-full  pt-6 pb-6 max-h-[85vh]  overflow-y-auto">
                   {children}
                </div>
             </div>

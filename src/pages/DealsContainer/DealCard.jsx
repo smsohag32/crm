@@ -65,7 +65,7 @@ const DealCard = ({ deal, isOverlay = false, refetch }) => {
             } ${isOverlay ? "opacity-90 scale-105 shadow-md" : ""}`}
       >
          <div className="flex items-start gap-2">
-            <UserAvatar className="border bg-gray-100 text-des" />
+            <UserAvatar name={deal?.lender_name} className="border bg-gray-100 text-des" />
             <div className="flex items-start flex-1 gap-2">
                <div>
                   <p onClick={() => navigate(`/deal/${deal.id}`)} onPointerDown={(e) => e.stopPropagation()} className="line-clamp-1 cursor-pointer hover:underline transition-all duration-200 hover:text-blue-700 text-title text-base font-medium">{deal.lender_name}</p>
