@@ -1,40 +1,16 @@
 import { Button } from "@/components/ui/button";
-import { Filter, Group, Users2 } from "lucide-react";
+import { Group, Users2 } from "lucide-react";
 import TeamCard from "./TeamCard";
+import { useGetAllTeamQuery } from "@/redux-store/api/teamApi";
+import Loading from "@/components/Loading/Loading";
+import Empty from "@/components/Empty/Empty";
+import { useState } from "react";
+import AddTeam from "./AddTeam";
 
 const Teams = () => {
-   const teamsData = [
-      {
-         id: 1,
-         name: "Design Gurus",
-         members: 8,
-         participants: ["Alice", "Bob", "Carol", "David"],
-      },
-      {
-         id: 2,
-         name: "Frontend Warriors",
-         members: 6,
-         participants: ["Eve", "Frank", "Grace", "Hank"],
-      },
-      {
-         id: 3,
-         name: "Backend Titans",
-         members: 10,
-         participants: ["Ivy", "Jack", "Karen", "Leo"],
-      },
-      {
-         id: 4,
-         name: "Full Stack Ninjas",
-         members: 7,
-         participants: ["Mike", "Nancy", "Oscar", "Paul"],
-      },
-      {
-         id: 5,
-         name: "AI Innovators",
-         members: 5,
-         participants: ["Quinn", "Rachel", "Steve", "Tom"],
-      },
-   ];
+   const { data: teamsData, isLoading, refetch } = useGetAllTeamQuery();
+   const [isAdd, setIsAdd] = useState(false);
+
 
    return (
       <div>
@@ -43,20 +19,19 @@ const Teams = () => {
                <Users2 className="text-des" /> Teams
             </h2>
             <div className="flex items-center gap-2">
-               <Button variant="outline" className="flex items-center text-sm px-2.5 gap-2">
-                  <Filter size={16} />Filters
-               </Button>
-               <Button size="sm" className="flex items-center text-sm px-2.5 !py-1.5 gap-2">
+
+               <Button onClick={() => setIsAdd(true)} size="sm" className="flex items-center text-sm px-2.5 !py-1.5 gap-2">
                   <Group size={16} /> Add New Team
                </Button>
             </div>
          </div>
 
-         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mt-4">
-            {teamsData.map((team) => (
+         {isLoading ? <Loading /> : teamsData?.length > 0 ? <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mt-4">
+            {teamsData?.map((team) => (
                <TeamCard key={team.id} team={team} />
             ))}
-         </div>
+         </div> : <Empty message={"No team found."} />}
+         <AddTeam isOpen={isAdd} setOpen={setIsAdd} refetch={refetch} />
       </div>
    );
 };

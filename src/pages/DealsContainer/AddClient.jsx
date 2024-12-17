@@ -45,7 +45,7 @@ const SelectField = ({ id, label, options, register, setValue, errors }) => (
    </div>
 );
 
-const AddClient = ({ isOpen, setOpen, refetch }) => {
+const AddClient = ({ isOpen, setOpen, refetch, clients }) => {
    const [selectedSpouse, setSelectedSpouse] = useState("");
    const [postClient, { isLoading }] = usePostClientMutation();
    const [step, setStep] = useState(1);
@@ -107,7 +107,10 @@ const AddClient = ({ isOpen, setOpen, refetch }) => {
    const optionsData = searchClient?.results?.map(item => ({
       label: item.name,
       value: item.name,
-   })) || [];
+   })) || clients?.map(item => ({
+      label: item.name,
+      value: item.name,
+   }));
 
 
 
@@ -172,9 +175,11 @@ const AddClient = ({ isOpen, setOpen, refetch }) => {
                            <SearchDropdown
                               placeholder={"Search client..."}
                               className="w-full"
-                              value={searchValue}
-                              setValue={setSearchValue}
+                              value={selectedSpouse}
+                              setValue={setSelectedSpouse}
                               optionData={optionsData}
+                              searchValue={searchValue}
+                              setSearchValue={setSearchValue}
                            />
                         </div>
                      </div>

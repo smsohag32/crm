@@ -111,7 +111,7 @@ const DealsContainer = () => {
                   <h2 className="flex items-center gap-2">
                      <span className="text-[20px] flex items-center gap-1">Deals</span>
                      <span className="bg-gray-200 flex items-center px-1 text-gray-700">
-                        <DollarSign size={16} />1455,00
+                        <DollarSign size={16} />155455,00
                      </span>
                      <span className="bg-gray-200 flex items-center px-1 text-gray-700">{dealData?.length || 0}</span>
                   </h2>

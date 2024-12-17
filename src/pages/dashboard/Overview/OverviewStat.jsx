@@ -27,7 +27,7 @@ const OverviewStat = () => {
             className="rounded-[12px] border border-orange-100  transition-all duration-300 bg-[#FDFDFD] bg-opacity-90 px-6 pt-6 pb-4 primary-shadow"
          >
             <p className="text-des ">This Month</p>
-            <div className="flex justify-between mt-2 bg-white flex-wrap gap-2">
+            <div className="flex justify-between mt-2  flex-wrap gap-2">
                <p className="text-[20px]  text-title  flex gap-1 items-center">
                   <Briefcase className="text-des" /> Total Settle
                </p>
@@ -41,9 +41,9 @@ const OverviewStat = () => {
             className="rounded-[12px]  border border-blue-100 transition-all duration-300 bg-[#FDFDFD] bg-opacity-90 px-6 pt-6 pb-4 primary-shadow"
          >
             <p className="text-des ">This Month</p>
-            <div className="flex justify-between mt-2 bg-white flex-wrap gap-2">
+            <div className="flex justify-between mt-2  flex-wrap gap-2">
                <p className="text-[20px]  text-title  flex gap-1 items-center">
-                  <Banknote className="text-des" /> Total Lender
+                  <Banknote className="text-des" /> Total Submit to Lender
                </p>
             </div>
             <div className="flex items-center mt-4 ps-1 justify-between">
@@ -55,7 +55,7 @@ const OverviewStat = () => {
             className="rounded-[12px] border border-green-100 transition-all duration-300 bg-[#FDFDFD] bg-opacity-90 px-6 pt-6 pb-4 primary-shadow"
          >
             <p className="text-des ">This Month</p>
-            <div className="flex justify-between mt-2 bg-white flex-wrap gap-2">
+            <div className="flex justify-between mt-2  flex-wrap gap-2">
                <p className="text-[20px] text-title   flex gap-1 items-center">
                   <CheckSquare className="text-des" />  Approval
                </p>

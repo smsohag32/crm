@@ -1,7 +1,7 @@
 import SearchInput from "@/components/SearchBox/SearchInput";
 import { Button } from "@/components/ui/button";
 import UserAvatar from "@/components/user-avatar/UserAvatar";
-import AddClient from "@/pages/DealsContainer/AddClient";
+
 import { ChevronLeft, ChevronRight, Edit3, EllipsisVertical, Eye, Trash2, UserCheck, UserPlus } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -16,6 +16,8 @@ import { useDeleteClientMutation, useGetAllClientsQuery, useLazyGetClientsByPage
 import CrmAlert from "@/components/ui/alert";
 import { toast } from "sonner";
 import { SearchDropdown } from "@/components/dropdown/SearchDropdown";
+import AddClient from "./AddClient";
+import Empty from "@/components/Empty/Empty";
 
 const ClientList = () => {
    const navigate = useNavigate()
@@ -45,6 +47,17 @@ const ClientList = () => {
    // Fetch initial client data
    const { data: clients, isLoading: isInitialLoading, refetch } = useGetAllClientsQuery();
 
+   useEffect(() => {
+      if (searchValue.trim() === "") {
+         setCurrentPageData(clients?.results || []);
+      } else if (searchClient) {
+         setCurrentPageData(searchClient.results || []);
+      }
+   }, [searchValue, searchClient, clients]);
+
+
+
+
    // Initialize state on initial load
    useEffect(() => {
       if (clients) {
@@ -56,7 +69,8 @@ const ClientList = () => {
       }
    }, [clients]);
 
-   // Fetch next page
+
+
    const handleNextPage = async () => {
       if (!paginationUrls.next) return;
       try {
@@ -93,21 +107,20 @@ const ClientList = () => {
       }
    };
 
-   // Search functionality placeholder
-   const handleSearch = (e) => {
-      console.log("Search triggered:", e);
-   };
 
-   // Action button handlers
-   const handleView = () => console.log("View action triggered");
    const handleEdit = () => console.log("Edit action triggered");
    const handleDeleteConfirm = async () => {
-      console.log(`Deleting client with ID: ${clientToDelete}`);
-      await deleteClient(clientToDelete).unwrap()
-      toast.success("Client Deleted Successfully.")
-      refetch()
-      setIsDeleteAlertOpen(false);
-      setClientToDelete(null);
+      try {
+         console.log(`Deleting client with ID: ${clientToDelete}`);
+         await deleteClient(clientToDelete).unwrap()
+         toast.success("Client Deleted Successfully.")
+         refetch()
+         setIsDeleteAlertOpen(false);
+         setClientToDelete(null);
+      } catch {
+         toast.error("Failed to Client Delete.")
+      }
+
    };
 
    const handleDeleteCancel = () => {
@@ -116,13 +129,9 @@ const ClientList = () => {
    };
 
 
-
-   const optionsData = searchClient?.results?.map(item => ({
-      label: item.name,
-      value: item.name,
-   })) || [];
-
-
+   const handleSearch = (e) => {
+      setSearchValue(e)
+   }
    return (
       <div>
          {/* Header Section */}
@@ -132,13 +141,7 @@ const ClientList = () => {
             </h2>
             <div className="flex items-center gap-2">
                <div className="w-full">
-                  <SearchDropdown
-                     placeHolder={"Search client..."}
-                     className="w-full"
-                     value={searchValue}
-                     setValue={setSearchValue}
-                     optionData={optionsData}
-                  />
+                  <SearchInput handleSearch={handleSearch} />
                </div>
                <Button onClick={() => setIsAdd(true)} size="" className="flex items-center text-sm px-2.5 !py-1.5 gap-2">
                   <UserPlus size={16} /> Add New
@@ -148,10 +151,10 @@ const ClientList = () => {
 
          {/* Main Content */}
          <div className="w-full mt-4 flex flex-col">
-            {isInitialLoading || isFetching ? (
+            {isInitialLoading || isFetching || clientLoading ? (
                <Loading />
             ) : (
-               <div className="min-w-full relative overflow-y-auto overflow-x-auto">
+               currentPageData?.length > 0 ? <div className="min-w-full relative overflow-y-auto overflow-x-auto">
                   {/* Table */}
                   <table className="overflow-auto border-0 m-0 w-full min-w-full">
                      <thead className="rounded-md border-none uppercase font-[500] text-center">
@@ -259,12 +262,12 @@ const ClientList = () => {
                         <ChevronRight size={16} />
                      </Button>
                   </div>
-               </div>
+               </div> : <Empty message={"Not found any data."} />
             )}
          </div>
 
          {/* Add Client Modal */}
-         <AddClient isOpen={isAdd} setOpen={setIsAdd} refetch={refetch} />
+         <AddClient isOpen={isAdd} clients={clients?.results} setOpen={setIsAdd} refetch={refetch} />
          <CrmAlert
             isOpen={isDeleteAlertOpen}
             message="Delete Client"

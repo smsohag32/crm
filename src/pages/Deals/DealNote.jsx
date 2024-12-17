@@ -50,11 +50,11 @@ const DealNote = ({ notes, dealId, refetch }) => {
                   <Card key={note.id}>
                      <CardContent className="p-4 flex flex-col lg:flex-row gap-4 items-start w-full justify-between">
                         <div className="w-full">
-                           <div className="flex items-start gap-2">
-                              <FileText size={20} className="mt-0.5" />
-                              <p className="text-base font-medium text-title">{note?.note}</p>
+                           <div className="flex items-start max-w-4xl gap-2">
+                              <span className="pt-1 w-5 h-5"><FileText size={16} className="" /></span>
+                              <p className="text-base font-normal text-title">{note?.note}</p>
                            </div>
-                           <p className="text-sm mt-6 text-muted-foreground ">
+                           <p className="text-sm ps-5 mt-6 text-muted-foreground ">
                               {moment(new Date()).format("LLL")}
                            </p>
                         </div>
@@ -79,8 +79,8 @@ const DealNote = ({ notes, dealId, refetch }) => {
 
          <CrmAlert
             isOpen={isDelete}
-            message="Delete Client"
-            description="Are you sure you want to delete this client? This action cannot be undone."
+            message="Delete Note"
+            description="Are you sure you want to delete this Note? This action cannot be undone."
             handleClose={handleClose}
             handleConfirm={confirmDelete}
          />

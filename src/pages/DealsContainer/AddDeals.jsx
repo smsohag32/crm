@@ -67,7 +67,7 @@ export const AssignMember = ({ users = [], selectedMembers, setSelectedMembers }
       <div className="space-y-0.5">
          <Input
             type="text"
-            placeholder="Search clients..."
+            placeholder="Search User..."
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}
             className="w-full p-2 bg-white  border rounded"
@@ -188,7 +188,7 @@ const AddDeals = ({ isOpen, setOpen, refetch }) => {
             console.log(res)
             const deal = {
                deal: res.id,
-               user: selectedMembers?.filter(mem => mem?.id) || []
+               user: selectedMembers?.map(mem => mem?.id) || []
             }
             await dealAssign(deal)
             toast.success("Deal added successfully.");

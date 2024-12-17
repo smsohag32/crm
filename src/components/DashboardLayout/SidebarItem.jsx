@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 
-const SidebarItem = ({ to, label, subItems, isOpen, onToggle, icon, hoverIcon, icon2 }) => {
+const SidebarItem = ({ to, label, subItems, isOpen, onToggle, icon }) => {
    const navigate = useNavigate();
    const { pathname } = useLocation();
 
+   // Function to check if a given path is active
    const isSubActive = (path) => pathname === path;
 
+   // Determine if the current item or any of its sub-items are active
    const isActive =
       pathname === to ||
       (subItems &&
@@ -40,7 +42,7 @@ const SidebarItem = ({ to, label, subItems, isOpen, onToggle, icon, hoverIcon, i
             onMouseEnter={() => setIsHovered(true)} // Set hover state on mouse enter
             onMouseLeave={() => setIsHovered(false)} // Reset hover state on mouse leave
             className={`rounded-[4px] text-[16px] group whitespace-nowrap transition-all w-full font-normal border-b-2 border-b-transparent py-[10px] ps-[18px] pe-[12px] cursor-pointer
-               ${isActive ? "bg-[#f6f9ff] text-blue-800 font-semibold  " : " hover:bg-[#f6f9ff]"}`}
+               ${isActive ? "bg-[#f6f9ff] text-blue-800 font-semibold" : "hover:bg-[#f6f9ff]"}`}
          >
             <div className="w-full bg-transparent">
                <div className="flex items-center w-full bg-transparent gap-[16px] h-full">
@@ -48,8 +50,6 @@ const SidebarItem = ({ to, label, subItems, isOpen, onToggle, icon, hoverIcon, i
                      {icon && <span className={`${isActive ? "text-blue-600" : "text-black"}`}>{icon}</span>}
                      {label}
                   </div>
-
-
 
                   {subItems && (
                      <span

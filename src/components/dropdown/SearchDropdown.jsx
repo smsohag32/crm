@@ -1,15 +1,13 @@
 import React, { useState, useRef } from "react";
 import { ScrollArea } from "../ui/scroll-area";
 
-export const SearchDropdown = ({ optionData, placeholder, value, setValue, searchValue, setSearchValue }) => {
+export const SearchDropdown = ({ optionData, placeholder, setValue, searchValue, setSearchValue }) => {
    const [isOpen, setIsOpen] = useState(false);
    const dropdownRef = useRef(null);
-
-   // Handle option selection
    const handleSelect = (selectedOption) => {
       setValue(selectedOption);
       setIsOpen(false);
-      setSearchValue("");
+      setSearchValue(selectedOption?.label);
    };
 
    const handleClickOutside = (e) => {
@@ -26,15 +24,9 @@ export const SearchDropdown = ({ optionData, placeholder, value, setValue, searc
    }, []);
 
    // Filter options based on search value
-   const filteredOptions =
-      searchValue?.length >= 2
-         ? optionData.filter((option) =>
-            option.label.toLowerCase().includes(searchValue.toLowerCase())
-         )
-         : optionData;
-
+   const filteredOptions = optionData || []
    return (
-      <div ref={dropdownRef} className="relative w-64">
+      <div ref={dropdownRef} className="relative w-full">
          {/* Input Box */}
          <input
             type="text"
@@ -50,11 +42,7 @@ export const SearchDropdown = ({ optionData, placeholder, value, setValue, searc
             <div className="absolute z-[999999] w-full bg-white h-[200px] border rounded-md shadow-md   mt-1">
                {/* Display message if no options */}
                <ScrollArea className="h-[200px] ">
-                  {filteredOptions?.length === 0 ? (
-                     <div className="px-3 py-2 text-gray-500">
-                        Not found
-                     </div>
-                  ) : (
+                  {filteredOptions?.length > 0 ? (
                      filteredOptions?.map((option) => (
                         <div
                            key={option.value}
@@ -64,6 +52,11 @@ export const SearchDropdown = ({ optionData, placeholder, value, setValue, searc
                            {option.label}
                         </div>
                      ))
+
+                  ) : (
+                     <div className="px-3 py-6 text-center  text-gray-500">
+                        Not found
+                     </div>
                   )}
                </ScrollArea>
             </div>

@@ -14,6 +14,7 @@ import ClientList from "@/pages/dashboard/Clients/ClientList";
 import ClientDetails from "@/pages/dashboard/Clients/ClientDetails";
 import DealDetail from "@/pages/Deals/DealDetail";
 import Profile from "@/pages/Profile/Profile";
+import TeamDetails from "@/pages/dashboard/Teams/TeamDetails";
 
 export const router = createBrowserRouter([
    {
@@ -61,6 +62,10 @@ export const router = createBrowserRouter([
          {
             path: "/dashboard/teams",
             element: <Teams />
+         },
+         {
+            path: "/dashboard/team/:id",
+            element: <TeamDetails />
          },
          {
             path: "/dashboard/user-management",

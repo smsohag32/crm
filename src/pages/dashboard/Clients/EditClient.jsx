@@ -5,9 +5,10 @@ import { CrmInput } from "@/components/ui/floatin-input";
 import { useForm } from "react-hook-form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-import { useUpdateClientMutation } from "@/redux-store/api/clientsApi";
+import { useSearchClientQuery, useUpdateClientMutation } from "@/redux-store/api/clientsApi";
 import { toast } from "sonner";
 import SpouseSet from "@/pages/DealsContainer/SpouseSet";
+import { SearchDropdown } from "@/components/dropdown/SearchDropdown";
 
 const InputField = ({ id, label, type, placeholder, register, validationRules, errors }) => (
    <div className="space-y-2">
@@ -47,6 +48,11 @@ const SelectField = ({ id, label, options, register, setValue, errors, defaultVa
 const EditClient = ({ isOpen, setOpen, refetch, clientDetails }) => {
    const [selectedSpouse, setSelectedSpouse] = useState("");
    const [updateClient, { isLoading }] = useUpdateClientMutation();
+   const [searchValue, setSearchValue] = useState("")
+
+   const { data: searchClient, isLoading: clientLoading } = useSearchClientQuery({
+      search: searchValue?.toLowerCase(),
+   });
 
 
 
@@ -78,10 +84,11 @@ const EditClient = ({ isOpen, setOpen, refetch, clientDetails }) => {
 
    const onSubmit = async (data) => {
       const id = clientDetails?.id;
-      const newData = data;
+      const newData = { spouse: selectedSpouse?.value, ...data };
       try {
          await updateClient({ newData, id }).unwrap();
          toast.success("Client updated successfully");
+         reset()
          refetch();
          handleClose();
       } catch (error) {
@@ -92,6 +99,13 @@ const EditClient = ({ isOpen, setOpen, refetch, clientDetails }) => {
    const handleClose = () => {
       setOpen(false);
    };
+   const optionsData = searchClient?.results?.map(item => ({
+      label: item.name,
+      value: item?.id,
+   })) || []
+
+
+
 
    return (
       <CmModal isOpen={isOpen} handleClose={handleClose} size="700px" title="Edit Client">
@@ -140,6 +154,7 @@ const EditClient = ({ isOpen, setOpen, refetch, clientDetails }) => {
                   errors={errors}
                />
 
+
                <SelectField
                   id="relationship_status"
                   label="Relationship Status"
@@ -156,6 +171,21 @@ const EditClient = ({ isOpen, setOpen, refetch, clientDetails }) => {
                   errors={errors}
                   defaultValue={clientDetails?.relationship_status}
                />
+
+               <div className="space-y-2">
+                  <label htmlFor="spouse" className="text-base font-medium text-title">Spouse <span className="text-des text-sm">({(clientDetails?.spouse)})</span></label>
+                  <div className="w-full">
+                     <SearchDropdown
+                        placeholder={"Search ..."}
+                        className="w-full"
+                        value={selectedSpouse}
+                        setValue={setSelectedSpouse}
+                        optionData={optionsData}
+                        searchValue={searchValue}
+                        setSearchValue={setSearchValue}
+                     />
+                  </div>
+               </div>
 
                <SelectField
                   id="employment_status"
@@ -174,11 +204,6 @@ const EditClient = ({ isOpen, setOpen, refetch, clientDetails }) => {
                   errors={errors}
                   defaultValue={clientDetails?.employment_status}
                />
-
-               <div className="space-y-2">
-                  <label htmlFor="spouse" className="text-base font-medium text-title">Spouse</label>
-                  <SpouseSet setSelectedSpouse={setSelectedSpouse} selectedSpouse={selectedSpouse} />
-               </div>
 
                <InputField
                   id="income"

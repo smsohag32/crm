@@ -28,6 +28,7 @@ const AddUser = ({ isOpen, setOpen, refetch }) => {
       };
       try {
          await postUser(newUser).unwrap()
+         toast.success("User added successfully.")
          handleClose()
          refetch()
 
@@ -180,7 +181,7 @@ const AddUser = ({ isOpen, setOpen, refetch }) => {
             </div>
             <div className="flex items-center gap-6 justify-end">
                <Button disabled={isLoading} type="button" onClick={handleClose} className="bg-white" variant="outline">Cancel</Button>
-               <Button type="submit" className="px-8" >Save</Button>
+               <Button type="submit" disabled={isLoading} className="px-8" >Save</Button>
             </div>
          </form>
       </CmModal>

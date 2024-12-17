@@ -94,14 +94,14 @@ const DealDetail = () => {
                   <div className='flex  gap-6'><div className='flex items-center gap-3'>
                      <UserAvatar name={"Client"} className="bg-slate-200 w-14 h-14" />
                      <div>
-                        <p className='text-[20px] font-normal text-title'>Donald T</p>
+                        <p className='text-[20px] font-normal text-title'>Alamin A</p>
                         <p className='text-sm text-des'>Client</p>
                      </div>
                   </div>
                      <div className='flex items-center gap-3'>
                         <UserAvatar name={"Client"} className="bg-slate-200 w-14 h-14" />
                         <div>
-                           <p className='text-[20px] font-normal text-title'>Donald T</p>
+                           <p className='text-[20px] font-normal text-title'>Sohag Sheik</p>
                            <p className='text-sm text-des'>Client</p>
                         </div>
                      </div></div>
@@ -109,7 +109,7 @@ const DealDetail = () => {
                      <DetailItem icon={<Users size={18} />} label="Lender Name" value={dealDetails.lender_name} />
                      <DetailItem icon={<MapPin size={18} />} label="Property Address" value={dealDetails.security_property_add} />
                      <DetailItem icon={<Briefcase size={18} />} label="Deal Type" value={dealDetails.deal_type} />
-                     <DetailItem icon={<DollarSign size={18} />} label="Loan Amount" value={`$${dealDetails.loan_amount}M`} />
+                     <DetailItem icon={<DollarSign size={18} />} label="Loan Amount" value={`$${dealDetails.loan_amount}`} />
                      <DetailItem icon={<Building2 size={18} />} label="Deal Stage" value={dealDetails.deal_stage} />
                   </div>
 
