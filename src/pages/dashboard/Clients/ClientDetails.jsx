@@ -94,7 +94,7 @@ const ClientDetails = () => {
                   <TabsList className="grid w-full grid-cols-3 border text-white bg-slate-500 !py-3 !px-3">
                      <TabsTrigger value="details">Client Details</TabsTrigger>
                      <TabsTrigger value="financial">Financial Overview</TabsTrigger>
-                     <TabsTrigger value="deals">Client Deals</TabsTrigger>
+                     <TabsTrigger value="deals">Deals</TabsTrigger>
                   </TabsList>
                   <TabsContent value="details">
                      <div className='grid gap-4 pt-4 pb-6 lg:grid-cols-3 '>
@@ -217,8 +217,13 @@ const ClientDetails = () => {
                      </div>
                   </TabsContent>
                   <TabsContent value="deals">
+                     <div className='mt-4 mb-4'>
+                        {deals && deals.length > 0 ? <p className='text-sm font-normal px-1 text-title'>
+                           Total deals {deals?.length || 0}
+                        </p> : null}
+                     </div>
                      {deals && deals.length > 0 ? (
-                        <div className="space-y-4 mt-6">
+                        <div className="space-y-4">
                            {deals.map((deal) => (
                               <Card key={deal.id} className="overflow-hidden transition-all duration-200 hover:shadow-lg">
                                  <CardContent className="p-0">
@@ -227,7 +232,7 @@ const ClientDetails = () => {
 
                                     >
                                        <div className="space-y-2">
-                                          <h4 onClick={() => navigate(`/deal/${deal?.id}`)} className="font-semibold text-lg text-primary hover:underline">
+                                          <h4 onClick={() => navigate(`/deal/${deal?.id}`)} className="font-semibold text-lg text-title hover:underline">
                                              {deal.lender_name}
                                           </h4>
                                           <div className="grid grid-cols-2 gap-2 text-sm text-gray-600">

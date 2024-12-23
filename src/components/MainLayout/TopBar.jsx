@@ -1,5 +1,5 @@
 import { Link, NavLink } from "react-router-dom"; // Import NavLink
-import { CircleDollarSign, SquareCheckBig, LayoutDashboard, AlignJustify, Contact } from "lucide-react";
+import { CircleDollarSign, SquareCheckBig, LayoutDashboard, AlignJustify, Contact, Mails } from "lucide-react";
 
 import { useState } from "react";
 import { useMediaQuery } from "@/hooks/use-media-query";
@@ -53,6 +53,11 @@ const TopBar = () => {
 
 
                <NavLink
+                  to="/emails"
+                  className={({ isActive }) => `text-base font-medium gap-1.5 flex items-center justify-center ${isActive ? activeClass : ''}`}>
+                  <Mails size={18} /> Email
+               </NavLink>
+               <NavLink
                   to="/dashboard"
                   className={({ isActive }) => `text-base font-medium gap-1.5 flex items-center justify-center ${isActive ? activeClass : ''}`}>
                   <LayoutDashboard size={18} /> Dashboard
@@ -71,27 +76,32 @@ const TopBar = () => {
                   </div>
                   <div className="w-full flex flex-col mt-6 gap-3 h-full">
                      <NavLink
-                        to="/deals"
-                        className={({ isActive }) => `text-base border-b py-3 font-medium gap-2 flex items-center lg:justify-center ${isActive ? activeClass : ''}`}>
-                        <CircleDollarSign /> Deals
+                        to="/"
+                        className={({ isActive }) => `text-base font-medium gap-1.5 flex items-center justify-center ${isActive ? activeClass : ''}`}>
+                        <CircleDollarSign size={18} /> Deals
                      </NavLink>
 
                      <NavLink
                         to="/tasks"
-                        className={({ isActive }) => `text-base border-b py-3 font-medium gap-2 flex items-center lg:justify-center ${isActive ? activeClass : ''}`}>
-                        <SquareCheckBig /> Tasks
+                        className={({ isActive }) => `text-base font-medium gap-1.5 flex items-center justify-center ${isActive ? activeClass : ''}`}>
+                        <SquareCheckBig size={18} /> Tasks
                      </NavLink>
                      <NavLink
                         to="/contacts"
-                        className={({ isActive }) => `text-base border-b py-3 font-medium gap-2 flex items-center lg:justify-center ${isActive ? activeClass : ''}`}>
-                        <Contact /> Contacts
+                        className={({ isActive }) => `text-base font-medium gap-1.5 flex items-center justify-center ${isActive ? activeClass : ''}`}>
+                        <Contact size={18} /> Contacts
                      </NavLink>
 
 
                      <NavLink
+                        to="/emails"
+                        className={({ isActive }) => `text-base font-medium gap-1.5 flex items-center justify-center ${isActive ? activeClass : ''}`}>
+                        <Mails size={18} /> Email
+                     </NavLink>
+                     <NavLink
                         to="/dashboard"
-                        className={({ isActive }) => `text-base border-b py-3 font-medium gap-2 flex items-center lg:justify-center ${isActive ? activeClass : ''}`}>
-                        <LayoutDashboard /> Dashboard
+                        className={({ isActive }) => `text-base font-medium gap-1.5 flex items-center justify-center ${isActive ? activeClass : ''}`}>
+                        <LayoutDashboard size={18} /> Dashboard
                      </NavLink>
 
                      <ProfileMenu />

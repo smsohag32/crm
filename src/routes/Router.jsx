@@ -15,13 +15,14 @@ import ClientDetails from "@/pages/dashboard/Clients/ClientDetails";
 import DealDetail from "@/pages/Deals/DealDetail";
 import Profile from "@/pages/Profile/Profile";
 import TeamDetails from "@/pages/dashboard/Teams/TeamDetails";
+import EmailsContainer from "@/pages/Emails/EmailsContainer";
 
 export const router = createBrowserRouter([
    {
       path: "/",
       element:
-         <AuthRoute userTypes={["admin", "user", "manager"]}><Main /></AuthRoute>
-      // <Main />
+         // <AuthRoute userTypes={["admin", "user", "manager"]}><Main /></AuthRoute>
+         <Main />
       ,
       children: [
          {
@@ -39,6 +40,10 @@ export const router = createBrowserRouter([
          {
             path: "/contacts",
             element: <ListOfContacts />,
+         },
+         {
+            path: "/emails",
+            element: <EmailsContainer />,
          },
 
       ],

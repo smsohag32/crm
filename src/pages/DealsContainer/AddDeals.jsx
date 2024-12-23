@@ -5,7 +5,7 @@ import { CrmInput } from "@/components/ui/floatin-input";
 import { useForm } from "react-hook-form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import { useDealAssignMutation, usePostDealMutation } from "@/redux-store/api/dealsApi";
+import { useAddDealClientMutation, useDealAssignMutation, usePostDealMutation } from "@/redux-store/api/dealsApi";
 import { useGetUsersQuery } from "@/redux-store/api/usersApi";
 import { useGetAllClientsQuery, useSearchClientQuery } from "@/redux-store/api/clientsApi";
 
@@ -158,6 +158,7 @@ const AddDeals = ({ isOpen, setOpen, refetch }) => {
       search: searchText,
    });
    const [dealAssign, { isLoading: assignLoading }] = useDealAssignMutation()
+   const [addDealClient] = useAddDealClientMutation()
 
 
    const { data: clientData } = useGetAllClientsQuery()
@@ -178,25 +179,38 @@ const AddDeals = ({ isOpen, setOpen, refetch }) => {
 
    const onSubmit = async (data) => {
       try {
-         const dealData = {
-            ...data,
-            assigned_members: selectedMembers.map(member => member.id),
-            clients: selectedClients.map(client => client.id),
-         };
          const res = await postDeal(data).unwrap();
          if (res?.id) {
-            console.log(res)
-            const deal = {
-               deal: res.id,
-               user: selectedMembers?.map(mem => mem?.id) || []
-            }
-            await dealAssign(deal)
             toast.success("Deal added successfully.");
             handleClose();
             refetch();
+
+            const dealData = {
+               deal: res.id,
+               user: selectedMembers?.map(mem => mem?.id) || []
+            };
+            const clientData = {
+               clients: selectedClients?.map(c => c?.id) || []
+            };
+
+            try {
+               await dealAssign({ ...dealData });
+               toast.info("Deal assigned successfully.");
+            } catch (assignError) {
+               console.warn("Deal assign failed", assignError);
+               toast.error("Deal assignment failed.");
+            }
+
+            try {
+               await addDealClient({ dealId: res.id, clientData });
+               toast.info("Clients added to deal successfully.");
+            } catch (clientError) {
+               console.warn("Add client to deal failed", clientError);
+               toast.error("Failed to add clients to deal.");
+            }
          }
       } catch (err) {
-         console.log(err);
+         console.error(err);
          toast.error("Failed to add deal.");
       }
    };

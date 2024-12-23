@@ -4,8 +4,8 @@ import { useGetTaskByDealQuery } from "@/redux-store/api/taskApi";
 import Loading from "@/components/Loading/Loading";
 import SmallEmpty from "@/components/Empty/SmallEmpty";
 
-const TaskList = ({ dealId }) => {
-   const { data: taskData, refetch, isLoading, isError } = useGetTaskByDealQuery(dealId);
+const TaskTab = ({ dealId }) => {
+   const { data: taskData, isLoading, refetch, isError } = useGetTaskByDealQuery(dealId);
 
    if (isLoading) {
       return <Loading />;
@@ -28,4 +28,4 @@ const TaskList = ({ dealId }) => {
    );
 };
 
-export default TaskList;
+export default TaskTab;

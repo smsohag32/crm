@@ -51,8 +51,8 @@ const AddTeamNote = ({ isOpen, setOpen, refetch, id }) => {
                <Textarea
                   {...register("note", { required: "Note is required" })}
                   placeholder={`Enter your ${noteType === "Team" ? "Team" : "private"} note here`}
-                  className="resize-none  bg-[#ffffff]"
-                  rows={6}
+                  className="  bg-[#ffffff]"
+                  rows={8}
                />
                {errors.note && <p className="text-red-600 text-xs">{errors.note.message}</p>}
             </div>

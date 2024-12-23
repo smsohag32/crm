@@ -25,14 +25,14 @@ export default function TeamDetails() {
       <div className="  px-2  pt-2">
          <TeamHeader refetch={refetch} members={team?.user} name={team.name} teamId={id} />
          <Tabs defaultValue="notes" className="mt-4">
-            <TabsList className="grid bg-transparent w-full grid-cols-2">
-               <TabsTrigger value="notes" className="flex text-title items-center">
+            <TabsList className="grid w-full grid-cols-2 border text-white bg-slate-500 !py-3 !px-3">
+               <TabsTrigger value="notes" className="flex  items-center">
                   <Notebook className="mr-2 h-4 w-4" />
                   Notes
                </TabsTrigger>
-               <TabsTrigger value="members" className="flex text-title items-center">
+               <TabsTrigger value="members" className="flex  items-center">
                   <Users className="mr-2 h-4 w-4" />
-                  Members
+                  Members ({team?.user?.length || 0})
                </TabsTrigger>
             </TabsList>
             <TabsContent value="members">

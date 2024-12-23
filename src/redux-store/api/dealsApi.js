@@ -14,6 +14,13 @@ const dealsApi = apiSlice.injectEndpoints({
          }),
          providesTags: ["deals"],
       }),
+      getAssignUsers: builder.query({
+         query: (dealId) => ({
+            url: `/api/deal/${dealId}/users/`,
+         }),
+         providesTags: ["deals"],
+      }),
+
       postDeal: builder.mutation({
          query: (newDeal) => ({
             url: `/api/deal/create/`,
@@ -31,13 +38,23 @@ const dealsApi = apiSlice.injectEndpoints({
          invalidatesTags: ["deals"],
       }),
       dealAssign: builder.mutation({
-         query: (newAssign) => ({
+         query: (dealData) => ({
             url: `/api/deal/deal-assign/create/`,
             method: "POST",
-            body: newAssign,
+            body: dealData,
          }),
          invalidatesTags: ["deals"],
       }),
+
+      dealAssignUpdate: builder.mutation({
+         query: ({ dealId, assignData }) => ({
+            url: `/api/deal/deal-assign/update/${dealId}/`,
+            method: "PATCH",
+            body: assignData,
+         }),
+         invalidatesTags: ["deals"],
+      }),
+
       stageChange: builder.mutation({
          query: ({ id, stage }) => ({
             url: `/api/deal/update/${id}/`,
@@ -46,6 +63,23 @@ const dealsApi = apiSlice.injectEndpoints({
          }),
          invalidatesTags: ["deals"],
       }),
+
+      // deal client
+      addDealClient: builder.mutation({
+         query: ({ dealId, clientData }) => ({
+            url: `/api/deal/${dealId}/clients/`,
+            method: "POST",
+            body: clientData,
+         }),
+         invalidatesTags: ["deals"],
+      }),
+      getDealClients: builder.query({
+         query: (dealId) => ({
+            url: `/api/deal/${dealId}/clients/`,
+         }),
+         providesTags: ["deals"],
+      }),
+
       deleteDeal: builder.mutation({
          query: (id) => ({
             url: `/api/deal/delete/${id}/`,
@@ -74,9 +108,13 @@ const dealsApi = apiSlice.injectEndpoints({
 
 export const {
    useGetDealQuery,
+   useAddDealClientMutation,
+   useGetDealClientsQuery,
    useEditDealMutation,
    usePostPrivateNoteMutation,
    usePostDealNoteMutation,
+   useGetAssignUsersQuery,
+   useDealAssignUpdateMutation,
    useGetAllDealsQuery,
    usePostDealMutation,
    useDealAssignMutation,

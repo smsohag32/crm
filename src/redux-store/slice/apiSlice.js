@@ -22,7 +22,7 @@ const baseQueryWithAuth = async (args, api, extraOptions) => {
 
       if (refreshToken) {
          const refreshResult = await fetchBaseQuery({
-            baseUrl: "http://127.0.0.1:8000",
+            // baseUrl: "http://127.0.0.1:8000",
          })(
             {
                url: "/api/users/auth/token/refresh",

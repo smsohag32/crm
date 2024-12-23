@@ -191,16 +191,19 @@ const EditDeal = ({ isOpen, setOpen, dealDetails, refetch }) => {
       try {
          const res = await editDeal({ id: dealDetails?.id, editValue: data }).unwrap();
          if (res?.id) {
-            console.log(res)
-            // const deal = {
-            //    deal: res.id,
-            //    user: selectedMembers?.filter(mem => mem?.id) || []
-            // }
-            // await dealAssign(deal)
-            setOpen(false)
-            toast.success("Deal edited successfully.");
+
+            const dealData = {
+               deal: res.id,
+               user: selectedMembers?.map(mem => mem?.id) || []
+            }
+
+
+            const assignRes = await dealAssign({ ...dealData })
+
+            toast.success("Deal Updated  successfully.");
             handleClose();
             refetch();
+
          }
          handleClose();
          toast.success("Deal edited successfully.");
@@ -225,12 +228,6 @@ const EditDeal = ({ isOpen, setOpen, dealDetails, refetch }) => {
    const isStepValid = () => {
       if (currentStep === 0) {
          return isValid;
-      }
-      if (currentStep === 1) {
-         return selectedMembers.length > 0;
-      }
-      if (currentStep === 2) {
-         return selectedClients.length > 0;
       }
       return true;
    };
