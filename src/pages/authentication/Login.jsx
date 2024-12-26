@@ -8,6 +8,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { loginUser } from "@/redux-store/slice/authSlice";
 import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
 const Login = () => {
    const [loading, setLoading] = useState(false)
    const navigate = useNavigate();
@@ -65,6 +66,7 @@ const Login = () => {
                         placeholder="Email address"
                         label="Enter Your Email"
                         type="email"
+                        defaultValue="sohagsheik32@gmail.com"
                         className={`primary-input ${errors.email
                            ? "ring-red-500 focus:ring-red-500 border-red-500"
                            : "ring-[#345a93] focus:ring-[#345593] "
@@ -88,6 +90,7 @@ const Login = () => {
                         id="password"
                         label="Password"
                         type="password"
+                        defaultValue="11223344"
                         placeholder="******"
                         className={`primary-input ${errors.password
                            ? "ring-red-500 focus:ring-red-500 border-red-500"
@@ -127,7 +130,7 @@ const Login = () => {
                         disabled={loading}
                         className="w-full disabled:opacity-50 disabled:cursor-not-allowed text-base  font-medium py-3"
                         size="xl">
-                        Sign In
+                        {loading ? <Loader2 className="animate-spin" /> : "Sign In"}
                      </Button>
                   </div>
                </form>
