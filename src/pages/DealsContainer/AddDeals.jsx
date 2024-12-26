@@ -98,7 +98,7 @@ export const AssignMember = ({ users = [], selectedMembers, setSelectedMembers }
 };
 
 // New ClientSelector component
-const ClientSelector = ({ clients, clientsData: allClients, selectedClients, setSearchText, searchText, setSelectedClients }) => {
+export const ClientSelector = ({ clients, clientsData: allClients, selectedClients, setSearchText, searchText, setSelectedClients }) => {
    return (
       <div className="space-y-0.5">
          <Input
@@ -348,7 +348,7 @@ const AddDeals = ({ isOpen, setOpen, refetch }) => {
                               type="button"
                               className="ml-2 text-lg text-red-600 flex items-center justify-center  rounded-full h-6 w-6  hover:text-white transition-all duration-100  hover:bg-red-500 p-1"
                               onClick={() => setSelectedClients(selectedClients.filter((c) => c.id !== client.id))}
-                           >
+                        >
                               ×
                            </button>
                         </Badge>

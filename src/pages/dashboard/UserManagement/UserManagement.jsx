@@ -89,7 +89,7 @@ const UserManagement = () => {
          </div>
 
          <div className="w-full mt-4 flex flex-col">
-            <div className="h-[68vh] min-w-full relative overflow-y-auto overflow-x-auto">
+            <div className=" min-w-full relative overflow-y-auto overflow-x-auto">
                {isLoading ? (
                   <p className="text-center mt-4">Loading...</p>
                ) : paginatedUsers.length > 0 ? (

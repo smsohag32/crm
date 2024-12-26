@@ -21,8 +21,8 @@ export const router = createBrowserRouter([
    {
       path: "/",
       element:
-         // <AuthRoute userTypes={["admin", "user", "manager"]}><Main /></AuthRoute>
-         <Main />
+         <AuthRoute userTypes={["admin", "user", "manager"]}><Main /></AuthRoute>
+      // <Main />
       ,
       children: [
          {
